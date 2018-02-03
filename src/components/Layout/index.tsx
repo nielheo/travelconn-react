@@ -1,4 +1,7 @@
 import * as React from 'react';
+
+import LeftMenu from './LeftMenu';
+
 import { WithStyles, withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -28,14 +31,16 @@ const styles = {
   },
   body: {
     flexGrow: 1,
-    margin: 12,
+    margin: 6,
   },
   menu: {
     textAlign: 'left',
-    padding: 12,
+    padding: 0,
+    margin: 0,
   },
   content: {
-    padding: 12,
+    padding: 16,
+    margin: 0,
     textAlign: 'left',
   },
 };
@@ -74,9 +79,11 @@ class Layout extends React.Component<PropsWithStyles,
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-            <MenuIcon />
-          </IconButton>
+          <Hidden mdUp={true}>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+              <MenuIcon />
+            </IconButton>
+          </Hidden>
           <Typography type="title" color="inherit" className={classes.flex}>
             TravelConn
           </Typography>
@@ -116,11 +123,11 @@ class Layout extends React.Component<PropsWithStyles,
     <div className={classes.body}>
       <Grid container={true}>
         <Hidden smDown={true}>
-          <Grid item={true} md={3} lg={2} xl={2}>
-            <Paper className={classes.menu}>Menu</Paper>
+          <Grid item md={2} >
+            <Paper className={classes.menu}><LeftMenu /></Paper>
           </Grid> 
         </Hidden>
-        <Grid item={true} sm={12} md={9} lg={10} xl={10}>
+        <Grid item xs={12} md={10} >
           <Paper className={classes.content}>{this.props.children}</Paper>
         </Grid>  
       </Grid>
