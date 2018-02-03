@@ -4,6 +4,8 @@ import registerServiceWorker from './registerServiceWorker';
 import { createStore } from 'redux';
 import { enthusiasm } from './reducers/index';
 import { StoreState } from './types/index';
+import { BrowserRouter } from 'react-router-dom';
+import routes from './routes';
 
 import './index.css';
 
@@ -12,14 +14,13 @@ const store = createStore<StoreState>(enthusiasm, {
   languageName: 'TypeScript',
 });
 
-import Hello from './containers/Hello';
 import { Provider } from 'react-redux';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Hello />
-  </Provider>,
-  document.getElementById('root') as HTMLElement
+    <Provider store={store}>
+      <BrowserRouter children={routes} />
+    </Provider>, 
+    document.getElementById('root') as HTMLElement
 );
 
 registerServiceWorker();
