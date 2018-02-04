@@ -1,5 +1,8 @@
 import * as React from 'react';
 import * as moment from 'moment';
+
+import HotelOccupancyDialog from './HotelOccupancyDialog';
+
 import { Theme } from 'material-ui/styles/createMuiTheme';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
@@ -39,7 +42,9 @@ type room = {
 type PropsWithStyles = Props & WithStyles<'root' | 'paper' | 'textField' | 'button'>;
 
 class NewBookingHotel extends React.Component<PropsWithStyles, 
-  {rooms: room[], checkIn: Date, checkOut: Date, searchClicked: boolean, cityHotel: string}> {
+  {rooms: room[], checkIn: Date, checkOut: Date, 
+    searchClicked: boolean, cityHotel: string,
+    openHotelOccupancy: boolean}> {
   constructor(props: PropsWithStyles) {
     super(props);
     this.state = {
@@ -47,7 +52,8 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
       rooms: [{adult: 2}],
       checkIn: moment().add(2, 'd').toDate(),
       checkOut: moment().add(3, 'd').toDate(),
-      searchClicked: false
+      searchClicked: false,
+      openHotelOccupancy: false,
     };
   }
 
@@ -94,6 +100,14 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
     if (!this.state.searchClicked) {
       this.setState({searchClicked: true});
     }
+  }
+
+  _occupancyClose = () => {
+    this.setState({openHotelOccupancy: false});
+  }
+
+  _occupancyFocus = () => {
+    this.setState({openHotelOccupancy: true});
   }
   
   public render() {
@@ -156,6 +170,12 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
             margin="normal"
             fullWidth
             value={this._occupancyText()}
+            onClick={this._occupancyFocus}
+          />
+          <HotelOccupancyDialog  
+            open={this.state.openHotelOccupancy}
+            onClose={this._occupancyClose}
+            value={this.state.rooms}
           />
         </Grid>
         <Hidden xsUp>
