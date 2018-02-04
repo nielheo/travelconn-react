@@ -5,7 +5,9 @@ import { withStyles, WithStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import Hidden from 'material-ui/Hidden';
 import { DatePicker } from 'material-ui-pickers';
+import { FormControl, FormHelperText } from 'material-ui/Form';
 
 const styles = (theme: Theme) => ({
   root: {
@@ -37,13 +39,15 @@ type room = {
 type PropsWithStyles = Props & WithStyles<'root' | 'paper' | 'textField' | 'button'>;
 
 class NewBookingHotel extends React.Component<PropsWithStyles, 
-  {rooms: room[], checkIn: Date, checkOut: Date}> {
+  {rooms: room[], checkIn: Date, checkOut: Date, searchClicked: boolean, cityHotel: string}> {
   constructor(props: PropsWithStyles) {
     super(props);
     this.state = {
+      cityHotel: '',
       rooms: [{adult: 2}],
       checkIn: moment().add(2, 'd').toDate(),
       checkOut: moment().add(3, 'd').toDate(),
+      searchClicked: false
     };
   }
 
@@ -80,21 +84,44 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
     if (this.state.checkOut !== e) {
       this.setState({checkOut: e});
     }
+
+    if (e <= this.state.checkIn) {
+      this.setState({checkIn: moment(e).add(-1, 'd').toDate() });
+    }
+  }
+
+  _searchClick = () => {
+    if (!this.state.searchClicked) {
+      this.setState({searchClicked: true});
+    }
   }
   
   public render() {
     let {classes} = this.props;
+    let {searchClicked, cityHotel} = this.state;
     return (
       <div className={classes.root}>
       <Grid container spacing={24}>
         <Grid item xs={12} md={6}>
+           
+          <FormControl 
+            error={searchClicked && !cityHotel.length} 
+            fullWidth 
+            aria-describedby="name-error-text"
+          >
             <TextField
               id="cityHotel"
               label="City / Hotel"
               type="search"
               margin="normal"
+              value={cityHotel}
+              error={searchClicked && !cityHotel.length}
               fullWidth
             />
+            <FormHelperText id="name-error-text">
+              {(searchClicked && !cityHotel.length ? '* Required' : '')}
+            </FormHelperText>
+          </FormControl>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <DatePicker
@@ -131,16 +158,24 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
             value={this._occupancyText()}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            id="nationality"
-            label="Guest Nationality"
-            margin="normal"
-            fullWidth
-          />
-        </Grid>
+        <Hidden xsUp>
+          <Grid item xs={12} md={6}>
+            <TextField
+              id="nationality"
+              label="Guest Nationality"
+              margin="normal"
+              fullWidth
+            />
+          </Grid>
+        </Hidden>
         <Grid item xs={12}>
-          <Button  id="nationality" fullWidth raised color="primary">
+          <Button  
+            id="nationality" 
+            fullWidth 
+            raised 
+            color="primary"
+            onClick={this._searchClick}
+          >
             S e a r c h
           </Button>
         </Grid>
