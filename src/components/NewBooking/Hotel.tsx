@@ -1,9 +1,10 @@
 import * as React from 'react';
-
+import * as moment from 'moment';
 import { Theme } from 'material-ui/styles/createMuiTheme';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import TextField from 'material-ui/TextField';
+import Button from 'material-ui/Button';
 import { DatePicker } from 'material-ui-pickers';
 
 const styles = (theme: Theme) => ({
@@ -20,6 +21,9 @@ const styles = (theme: Theme) => ({
     marginLeft: theme.spacing.unit * 2,
     marginRight: theme.spacing.unit * 2,
   },
+  button: {
+    margin: theme.spacing.unit,
+  },
 });
 
 interface Props {
@@ -30,7 +34,7 @@ type room = {
   childAges?: number[],
 };
 
-type PropsWithStyles = Props & WithStyles<'root' | 'paper' | 'textField'>;
+type PropsWithStyles = Props & WithStyles<'root' | 'paper' | 'textField' | 'button'>;
 
 class NewBookingHotel extends React.Component<PropsWithStyles, 
   {rooms: room[], checkIn: Date, checkOut: Date}> {
@@ -38,8 +42,8 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
     super(props);
     this.state = {
       rooms: [{adult: 2}],
-      checkIn: new Date(),
-      checkOut: new Date(),
+      checkIn: moment().add(2, 'd').toDate(),
+      checkOut: moment().add(3, 'd').toDate(),
     };
   }
 
@@ -62,12 +66,20 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
     return text;
   }
 
-  _checkInChange = () => {
+  _checkInChange = (e: Date) => {
+    if (this.state.checkIn !== e) {
+      this.setState({checkIn: e});
+    }
 
+    if (e >= this.state.checkOut) {
+      this.setState({checkOut: moment(e).add(1, 'd').toDate() });
+    }
   }
 
-  _checkOutChange = () => {
-
+  _checkOutChange = (e: Date) => {
+    if (this.state.checkOut !== e) {
+      this.setState({checkOut: e});
+    }
   }
   
   public render() {
@@ -89,8 +101,11 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
             id="checkIn"
             label="Check In"
             margin="normal"
+            format={'dddd, MMMM Do'}
             value={this.state.checkIn}
             onChange={this._checkInChange}
+            autoOk
+            animateYearScrolling
             fullWidth
           />
         </Grid>
@@ -99,8 +114,11 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
             id="checkOut"
             label="Check Out"
             margin="normal"
-            value={this.state.checkIn}
-            onChange={this._checkInChange}
+            format={'dddd, MMMM Do'}
+            value={this.state.checkOut}
+            onChange={this._checkOutChange}
+            autoOk
+            animateYearScrolling
             fullWidth
           />
         </Grid>
@@ -121,6 +139,12 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
             fullWidth
           />
         </Grid>
+        <Grid item xs={12}>
+          <Button  id="nationality" fullWidth raised color="primary">
+            S e a r c h
+          </Button>
+        </Grid>
+
       </Grid>
     </div>);
   }
