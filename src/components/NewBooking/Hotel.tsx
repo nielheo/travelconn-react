@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as moment from 'moment';
 
-import HotelOccupancyDialog from './HotelOccupancyDialog';
+import HotelOccupancyDialog from '../HotelOccupancyDialog';
 
 import { Theme } from 'material-ui/styles/createMuiTheme';
 import { withStyles, WithStyles } from 'material-ui/styles';
@@ -11,6 +11,7 @@ import Button from 'material-ui/Button';
 import Hidden from 'material-ui/Hidden';
 import { DatePicker } from 'material-ui-pickers';
 import { FormControl, FormHelperText } from 'material-ui/Form';
+import { room } from '../type';
 
 const styles = (theme: Theme) => ({
   root: {
@@ -33,11 +34,6 @@ const styles = (theme: Theme) => ({
 
 interface Props {
 }
-
-type room = {
-  adult: number,
-  childAges?: number[],
-};
 
 type PropsWithStyles = Props & WithStyles<'root' | 'paper' | 'textField' | 'button'>;
 
@@ -102,8 +98,11 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
     }
   }
 
-  _occupancyClose = () => {
-    this.setState({openHotelOccupancy: false});
+  _occupancyClose = (rooms: room[]) => {
+    this.setState({
+      openHotelOccupancy: false,
+      rooms: rooms
+    });
   }
 
   _occupancyFocus = () => {
@@ -175,7 +174,7 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
           <HotelOccupancyDialog  
             open={this.state.openHotelOccupancy}
             onClose={this._occupancyClose}
-            value={this.state.rooms}
+            rooms={this.state.rooms}
           />
         </Grid>
         <Hidden xsUp>

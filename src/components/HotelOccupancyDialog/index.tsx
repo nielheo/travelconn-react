@@ -6,44 +6,58 @@ import { InputLabel } from 'material-ui/Input';
 import { MenuItem } from 'material-ui/Menu';
 import { FormControl } from 'material-ui/Form';
 import Select from 'material-ui/Select';
-
-type room = {
-  adult: number,
-  childAges?: number[],
-};
+import { ChangeEvent } from 'react';
+import { room } from '../type';
+import Room from './Room';
 
 interface Props {
-  value: room[];
+  rooms: room[];
   open: boolean;
   onClose: Function;
 }
 
-export default class ConfirmationDialog extends React.Component<Props, {value: room[]}> {
+export default class HotelOccupancy extends React.Component<Props, 
+{rooms: room[], 
+  roomNo: number}> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      value: this.props.value,
+      rooms: this.props.rooms.slice(0),
+      roomNo: this.props.rooms.slice(0).length || 1,
     };
   }
   
-  componentWillMount() {
-    this.setState({ value: this.props.value });
-  }
-
   handleCancel = () => {
-    this.props.onClose(this.props.value);
+    this.props.onClose(this.props.rooms);
   }
 
   handleOk = () => {
-    this.props.onClose(this.state.value);
+    this.props.onClose(this.state.rooms.slice(0, this.state.roomNo));
+  }
+
+  _roomChanged = (e: ChangeEvent<HTMLInputElement>) => {
+    let newRoomNo = parseInt(e.target.value, 10);
+    if (this.state.roomNo !== newRoomNo) {
+      this.setState({roomNo: newRoomNo});
+
+      // check if rooms array size less then room no
+      if (this.state.rooms.length < newRoomNo) {
+        let rooms = this.state.rooms.slice(0);
+        for (let i = this.state.rooms.length; i < newRoomNo; i++) {
+          rooms.push({ adult: 2});
+        }
+        this.setState({rooms: rooms});
+      }
+    }
   }
 
   render() {
+    let roomIndex = 1;
     return (
       <Dialog
         disableBackdropClick
         disableEscapeKeyDown
-        maxWidth="xs"
+        maxWidth="md"
         aria-labelledby="confirmation-dialog-title"
         open={this.props.open}
       >
@@ -52,11 +66,12 @@ export default class ConfirmationDialog extends React.Component<Props, {value: r
           <FormControl style={{minWidth: 160}}>
             <InputLabel htmlFor="age-simple">Number of Rooms</InputLabel>
             <Select
-              value={this.state.value.length}
+              value={this.state.roomNo}
               inputProps={{
                 name: 'rooms',
                 id: 'rooms',
               }}
+              onChange={this._roomChanged}
             >
               <MenuItem value={1}>1 room</MenuItem>
               <MenuItem value={2}>2 rooms</MenuItem>
@@ -66,12 +81,17 @@ export default class ConfirmationDialog extends React.Component<Props, {value: r
               <MenuItem value={6}>6 rooms</MenuItem>
               <MenuItem value={7}>7 rooms</MenuItem>
               <MenuItem value={8}>8 rooms</MenuItem>
+              <MenuItem value={9}>9 rooms</MenuItem>
             </Select>
           </FormControl>
-          <label>Room 1</label>
+          { 
+            this.state.rooms.slice(0, this.state.roomNo).map((curRoom: room) => 
+              <Room roomId={roomIndex++} room={curRoom} key={roomIndex} />  
+            )
+          }
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleCancel} color="primary">
+          <Button onClick={this.handleCancel} color="default">
             Cancel
           </Button>
           <Button onClick={this.handleOk} color="primary">
