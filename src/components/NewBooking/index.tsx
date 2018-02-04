@@ -42,11 +42,17 @@ class NewBooking extends React.Component<PropsWithStyles, {value: number}> {
     this.setState({ value: index });
   }
 
+  _redirect = (url: string) => {
+    this.props.history.push(url);
+  }
+
   public render() {
     let { classes } = this.props;
     return (
     <div className={classes.root}>
-      <h1>Create New Booking</h1>
+      <Typography type="display1" gutterBottom>
+        Create New Booking
+      </Typography>
         <AppBar position="static" color="default">
           <Tabs
             value={this.state.value}
@@ -69,7 +75,7 @@ class NewBooking extends React.Component<PropsWithStyles, {value: number}> {
           onChangeIndex={this.handleChangeIndex}
         >
           <Typography component="div" dir={'ltr'} style={{ padding: 8 }}>
-            <NewHotel />
+            <NewHotel redirect={this._redirect} />
           </Typography>
           <Typography component="div" dir={'ltr'} style={{ padding: 8 * 3 }}>
           ------- Flight ------

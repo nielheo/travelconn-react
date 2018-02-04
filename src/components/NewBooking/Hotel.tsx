@@ -11,13 +11,13 @@ import Button from 'material-ui/Button';
 import Hidden from 'material-ui/Hidden';
 import { DatePicker } from 'material-ui-pickers';
 import { FormControl, FormHelperText } from 'material-ui/Form';
-import { room } from '../type';
+import { room } from '../types';
 
 const styles = (theme: Theme) => ({
   root: {
     flexGrow: 1,
     marginTop: 12,
-    padding: 16,
+    padding: 8,
   },
   paper: {
     padding: 16,
@@ -33,18 +33,21 @@ const styles = (theme: Theme) => ({
 });
 
 interface Props {
+  redirect: Function;
 }
 
 type PropsWithStyles = Props & WithStyles<'root' | 'paper' | 'textField' | 'button'>;
 
 class NewBookingHotel extends React.Component<PropsWithStyles, 
   {rooms: room[], checkIn: Date, checkOut: Date, 
-    searchClicked: boolean, cityHotel: string,
+    searchClicked: boolean, cityHotel: string, city: string, country: string,
     openHotelOccupancy: boolean}> {
   constructor(props: PropsWithStyles) {
     super(props);
     this.state = {
-      cityHotel: '',
+      cityHotel: 'Bangkok, Thailand',
+      city: 'bangkok',
+      country: 'th',
       rooms: [{adult: 2}],
       checkIn: moment().add(2, 'd').toDate(),
       checkOut: moment().add(3, 'd').toDate(),
@@ -96,6 +99,21 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
     if (!this.state.searchClicked) {
       this.setState({searchClicked: true});
     }
+
+    let rooms = this.state.rooms.map((rm: room) => {
+      let r: string = rm.adult.toString();
+      if ((rm.childAges && rm.childAges.length) || 0 > 1) {
+        r += ',' + (rm.childAges && rm.childAges.join(','));
+      }
+
+      return r;
+    
+    }).join('|');
+
+    this.props.redirect(`/hotels/${this.state.country}/${this.state.city}/avail`
+      + `?cin=${moment(this.state.checkIn).format('YYYYMMDD')}`
+      + `&cout=${moment(this.state.checkOut).format('YYYYMMDD')}`
+      + `&rooms=${rooms}`);
   }
 
   _occupancyClose = (rooms: room[]) => {

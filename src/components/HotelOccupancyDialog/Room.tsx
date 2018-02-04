@@ -8,7 +8,7 @@ import Select from 'material-ui/Select';
 import { ChangeEvent } from 'react';
 
 import Grid from 'material-ui/Grid';
-import { room } from '../type';
+import { room } from '../types';
 
 const styles = () => ({
   root: {

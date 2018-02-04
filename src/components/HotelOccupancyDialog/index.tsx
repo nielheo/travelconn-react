@@ -7,7 +7,7 @@ import { MenuItem } from 'material-ui/Menu';
 import { FormControl } from 'material-ui/Form';
 import Select from 'material-ui/Select';
 import { ChangeEvent } from 'react';
-import { room } from '../type';
+import { room } from '../types';
 import Room from './Room';
 
 interface Props {

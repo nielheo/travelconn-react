@@ -128,7 +128,7 @@ class Layout extends React.Component<PropsWithStyles,
           </Grid> 
         </Hidden>
         <Grid item xs={12} md={10} >
-          <Paper className={classes.content}>{this.props.children}</Paper>
+          <Paper className={classes.content} elevation={0}>{this.props.children}</Paper>
         </Grid>  
       </Grid>
     </div></section>);
