@@ -22,6 +22,7 @@ const styles = () => ({
 interface Props {
   roomId: number;
   room: room;
+  onRoomUpdate: Function;
 }
 
 type PropsWithStyles = Props & WithStyles<'root'>;
@@ -39,31 +40,47 @@ class NewBookRoom extends React.Component<PropsWithStyles, {
     };
   }
 
+  _updateRoom = () => {
+    let childAges: number[] = [];
+    if (this.state.children > 0) { childAges.push(this.state.child1); }
+    if (this.state.children > 1) { childAges.push(this.state.child2); }
+
+    let updatedRoom: room = {
+      adult: this.state.adult,
+      childAges: childAges
+    };
+
+    this.props.onRoomUpdate(this.props.roomId, updatedRoom);
+  }
+
   _adultChange = (e: ChangeEvent<HTMLInputElement>) => {
     let newAdult = parseInt(e.target.value, 10);
+    console.log('_adultChange');
+    console.log(newAdult);
+    console.log(this.state.adult);
     if (this.state.adult !== newAdult) {
-      this.setState({adult: newAdult});
+      this.setState({adult: newAdult}, () => this._updateRoom());
     }
   }
 
   _childrenChange = (e: ChangeEvent<HTMLInputElement>) => {
     let newChildren = parseInt(e.target.value, 10);
     if (this.state.children !== newChildren) {
-      this.setState({children: newChildren});
+      this.setState({children: newChildren}, () => this._updateRoom());
     }
   }
 
   _child1Change = (e: ChangeEvent<HTMLInputElement>) => {
     let newChild1 = parseInt(e.target.value, 10);
     if (this.state.child1 !== newChild1) {
-      this.setState({child1: newChild1});
+      this.setState({child1: newChild1}, () => this._updateRoom());
     }
   }
 
   _child2Change = (e: ChangeEvent<HTMLInputElement>) => {
     let newChild2 = parseInt(e.target.value, 10);
     if (this.state.child2 !== newChild2) {
-      this.setState({child2: newChild2});
+      this.setState({child2: newChild2}, () => this._updateRoom());
     }
   }
 

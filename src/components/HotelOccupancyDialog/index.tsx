@@ -51,6 +51,18 @@ export default class HotelOccupancy extends React.Component<Props,
     }
   }
 
+  _updateRoom = (index: number, updatedRoom: room) => {
+    if (this.state.roomNo >= index) {
+      let rooms = this.state.rooms.slice(0, index - 1);
+      rooms.push(updatedRoom);
+      for (let i = index; i < this.state.roomNo; i++) {
+        rooms.push(this.state.rooms[i]);
+      }
+
+      this.setState({rooms: rooms});
+    }
+  }
+
   render() {
     let roomIndex = 1;
     return (
@@ -86,7 +98,7 @@ export default class HotelOccupancy extends React.Component<Props,
           </FormControl>
           { 
             this.state.rooms.slice(0, this.state.roomNo).map((curRoom: room) => 
-              <Room roomId={roomIndex++} room={curRoom} key={roomIndex} />  
+              <Room roomId={roomIndex++} room={curRoom} key={roomIndex} onRoomUpdate={this._updateRoom} />  
             )
           }
         </DialogContent>
