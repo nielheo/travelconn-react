@@ -15,6 +15,7 @@ import StarBorder from 'material-ui-icons/StarBorder';
 import Assessment from 'material-ui-icons/Assessment';
 import Add from 'material-ui-icons/Add';
 import Folder from 'material-ui-icons/Folder';
+import Divider from 'material-ui/Divider';
 
 const styles = (theme: Theme) => ({
   root: {
@@ -50,6 +51,7 @@ class LeftMenu extends React.Component<Props & WithStyles<'root' | 'nested'>, {}
             </ListItemIcon>
             <ListItemText inset primary="Dashboard" />
           </ListItem>
+          <Divider/>
           <ListItem button component={Link} {... {to: '/newbooking'}}>
             <ListItemIcon>
               <Add />
@@ -62,6 +64,7 @@ class LeftMenu extends React.Component<Props & WithStyles<'root' | 'nested'>, {}
             </ListItemIcon>
             <ListItemText inset primary="Booking List" />
           </ListItem>
+          <Divider />
           <ListItem button>
             <ListItemIcon>
               <DraftsIcon />

@@ -13,6 +13,8 @@ import Flight from 'material-ui-icons/Flight';
 import LocalFlorist from 'material-ui-icons/LocalFlorist';
 import LocalTaxi from 'material-ui-icons/LocalTaxi';
 
+import NewHotel from './Hotel';
+
 const styles = (theme: Theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
@@ -66,16 +68,16 @@ class NewBooking extends React.Component<PropsWithStyles, {value: number}> {
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <Typography component="div" dir={'rtl'} style={{ padding: 8 * 3 }}>
-            ------- Hotel ------
+          <Typography component="div" dir={'ltr'} style={{ padding: 8 }}>
+            <NewHotel />
           </Typography>
-          <Typography component="div" dir={'rtl'} style={{ padding: 8 * 3 }}>
+          <Typography component="div" dir={'ltr'} style={{ padding: 8 * 3 }}>
           ------- Flight ------
           </Typography>
-          <Typography component="div" dir={'rtl'} style={{ padding: 8 * 3 }}>
+          <Typography component="div" dir={'ltr'} style={{ padding: 8 * 3 }}>
           ------- Tour ------
           </Typography>
-          <Typography component="div" dir={'rtl'} style={{ padding: 8 * 3 }}>
+          <Typography component="div" dir={'ltr'} style={{ padding: 8 * 3 }}>
           ------- Transfer ------
           </Typography>
         </SwipeableViews>
