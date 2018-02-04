@@ -11,7 +11,7 @@ import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
-import  { TablePagination } from 'material-ui/Table';
+import Table, { TableRow, TableFooter, TableHead, TablePagination } from 'material-ui/Table';
 
 import { room, hotelResult, hotel } from '../types';
 
@@ -21,7 +21,8 @@ interface Props {
 type PropsWithStyles = Props & RouteComponentProps<{
   country: string
   city: string
-}> & WithStyles<'root' | 'paper' | 'control' | 'card' | 'media' | 'cardAction'>;
+}> & WithStyles<'root' | 'paper' | 'control' | 'card' | 'media' | 'cardAction' | 'pagingBottom'
+  | 'pagingTop'>;
 
 const styles = (theme: Theme) => ({
   root: {
@@ -40,6 +41,12 @@ const styles = (theme: Theme) => ({
   cardAction: {
     right: 0,
     width: '100%',
+  },
+  pagingBottom: {
+    marginTop: 16,
+  },
+  pagingTop: {
+    marginBottom: 16,
   }
 });
 
@@ -142,7 +149,31 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
         Hotel Result {this.props.match.params.city}, {this.props.match.params.country}
       </Typography>
       { this.state.result 
-        ? <section><Grid container className={classes.root} spacing={16}>
+        ? <section>
+          <Table>
+          <TableHead>
+            <TableRow>
+              <TablePagination
+                colSpan={1}
+                count={result!.hotels.length}
+                rowsPerPage={this.state.itemPerPage}
+                page={this.state.page}
+                backIconButtonProps={{
+                  'aria-label': 'Previous Page',
+                }}
+                nextIconButtonProps={{
+                  'aria-label': 'Next Page',
+                }}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                className={classes.pagingTop}
+                labelRowsPerPage={''}
+                rowsPerPageOptions={[]}
+              />
+            </TableRow>
+          </TableHead>
+        </Table>
+          <Grid container className={classes.root} spacing={16}>
           {result!.hotels.slice(this.state.page * this.state.itemPerPage, 
                                 ((this.state.page + 1) * this.state.itemPerPage))
           .map((htl: hotel) => 
@@ -163,27 +194,36 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
               </CardContent>
               <CardActions className={classes.cardAction}>
                 <Button size="small" color="secondary">
-                  Book
+                  Select
                 </Button>
               </CardActions>
             </Card>
           </Grid>
         )}
         </Grid>
-        <TablePagination
-          colSpan={12}
-          count={result!.hotels.length}
-          rowsPerPage={this.state.itemPerPage}
-          page={this.state.page}
-          backIconButtonProps={{
-            'aria-label': 'Previous Page',
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page',
-          }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-        />
+        <Table>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                colSpan={1}
+                count={result!.hotels.length}
+                rowsPerPage={this.state.itemPerPage}
+                page={this.state.page}
+                backIconButtonProps={{
+                  'aria-label': 'Previous Page',
+                }}
+                nextIconButtonProps={{
+                  'aria-label': 'Next Page',
+                }}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                className={classes.pagingBottom}
+                labelRowsPerPage={''}
+                rowsPerPageOptions={[]}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
         </section>
         : <label>Search your hotels</label>
 

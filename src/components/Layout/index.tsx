@@ -10,6 +10,7 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui/Menu';
+import Drawer from 'material-ui/Drawer';
 import Paper from 'material-ui/Paper';
 import Grid from 'material-ui/Grid';
 import Hidden from 'material-ui/Hidden';
@@ -49,12 +50,15 @@ type PropsWithStyles = LayoutProps & WithStyles<'root' | 'flex' | 'menuButton' |
 
 class Layout extends React.Component<PropsWithStyles, 
   {auth: boolean, 
-    anchorEl: EventTarget & HTMLElement | undefined}> {
+    anchorEl: EventTarget & HTMLElement | undefined,
+    left: boolean
+  }> {
   constructor(props: PropsWithStyles) {
     super(props);
     this.state = {
       auth: true,
       anchorEl: undefined,
+      left: false,
     };
   }
 
@@ -70,6 +74,12 @@ class Layout extends React.Component<PropsWithStyles,
     this.setState({ anchorEl: undefined });
   }
 
+  _toggleDrawer = (open: boolean) => () => {
+    this.setState({
+      left: open,
+    });
+  }
+
   public render() {
     const {classes} = this.props;
     const { auth, anchorEl } = this.state;
@@ -79,10 +89,25 @@ class Layout extends React.Component<PropsWithStyles,
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Hidden mdUp={true}>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-              <MenuIcon />
+          <Hidden mdUp>
+            <IconButton 
+              className={classes.menuButton} 
+              color="inherit" 
+              aria-label="Menu" 
+              onClick={this._toggleDrawer(true)}
+            >
+                <MenuIcon/>
             </IconButton>
+            <Drawer open={this.state.left} onClose={this._toggleDrawer(false)}>
+              <div
+                tabIndex={0}
+                role="button"
+                onClick={this._toggleDrawer(false)}
+                onKeyDown={this._toggleDrawer(false)}
+              >
+                <LeftMenu />
+              </div>
+            </Drawer>
           </Hidden>
           <Typography type="title" color="inherit" className={classes.flex}>
             TravelConn
