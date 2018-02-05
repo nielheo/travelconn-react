@@ -3,14 +3,13 @@ import * as moment from 'moment';
 import * as queryString from 'query-string';
 
 import { MouseEvent } from 'react';
-
+import { Link } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 import { Theme } from 'material-ui/styles/createMuiTheme';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
-import Button from 'material-ui/Button';
-import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
+import Card, { CardContent, CardMedia } from 'material-ui/Card';
 import Table, { TableRow, TableFooter, TableHead, TablePagination } from 'material-ui/Table';
 
 import { room, hotelResult, hotel } from '../types';
@@ -22,7 +21,7 @@ type PropsWithStyles = Props & RouteComponentProps<{
   country: string
   city: string
 }> & WithStyles<'root' | 'paper' | 'control' | 'card' | 'media' | 'cardAction' | 'pagingBottom'
-  | 'pagingTop'>;
+  | 'pagingTop' | 'noLink' >;
 
 const styles = (theme: Theme) => ({
   root: {
@@ -36,10 +35,9 @@ const styles = (theme: Theme) => ({
     padding: theme.spacing.unit * 2,
   },
   media: {
-    height: 160,
+    height: 200,
   },
   cardAction: {
-    right: 0,
     width: '100%',
   },
   pagingBottom: {
@@ -47,6 +45,9 @@ const styles = (theme: Theme) => ({
   },
   pagingTop: {
     marginBottom: 16,
+  },
+  noLink: {
+    textDecoration: 'none'
   }
 });
 
@@ -143,6 +144,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
   public render() {
     let {result} = this.state;
     let {classes} = this.props;
+    let query = queryString.parse(this.props.location.search);
     return (
     <div>
       <Typography type="display1" gutterBottom>
@@ -173,31 +175,36 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
             </TableRow>
           </TableHead>
         </Table>
-          <Grid container className={classes.root} spacing={16}>
+          <Grid container className={classes.root} spacing={16} >
           {result!.hotels.slice(this.state.page * this.state.itemPerPage, 
                                 ((this.state.page + 1) * this.state.itemPerPage))
           .map((htl: hotel) => 
-          <Grid item md={3} sm={6} xs={12} key={htl.id}>
-            <Card className={classes.card} >
-              <CardMedia
-                className={classes.media}
-                image={htl.thumbnail}
-                title="Contemplative Reptile"
-              />
-              <CardContent>
-                <Typography type="headline" component="h2" color="primary">
-                  {htl.name}
-                </Typography>
-                <Typography component="p">
-                  <span dangerouslySetInnerHTML={this._rawMarkup(htl.shortDesc)} />
-                </Typography>
-              </CardContent>
-              <CardActions className={classes.cardAction}>
-                <Button size="small" color="secondary">
-                  Select
-                </Button>
-              </CardActions>
-            </Card>
+          <Grid item md={4} sm={6} xs={12} key={htl.id}>
+            <Link 
+              to={`/hotels/${this.state.country}/${this.state.city}/${htl.id}/rooms`
+                + `?cin=${query.cin}&cout=${query.cout}&rooms=${query.rooms}`} 
+              className={classes.noLink} 
+              target="_blank"
+            >
+              <Card className={classes.card} >
+                <CardMedia
+                  className={classes.media}
+                  image={htl.thumbnail.replace('_s.', '_b.')}
+                  title="Contemplative Reptile"
+                />
+                <CardContent>
+                  <Typography type="headline" component="h2" color="primary">
+                    {htl.name}
+                  </Typography>
+                  <Typography component="p">
+                    <span dangerouslySetInnerHTML={this._rawMarkup(htl.shortDesc)} />
+                  </Typography>
+                  <Typography type="headline" component="p" color="secondary" align={'right'}>
+                    {htl.hotelRooms[0].chargeableRate.currency} {htl.hotelRooms[0].chargeableRate.total}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Link>
           </Grid>
         )}
         </Grid>
