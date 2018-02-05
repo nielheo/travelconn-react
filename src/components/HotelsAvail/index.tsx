@@ -148,10 +148,10 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
     return (
     <div>
       <Typography type="display1" gutterBottom>
-        Hotel Result {this.props.match.params.city}, {this.props.match.params.country}
+        Hotel in {this.props.match.params.city}, {this.props.match.params.country}
       </Typography>
       { this.state.result 
-        ? <section>
+        ? (this.state.result.hotels ? <section>
           <Table>
           <TableHead>
             <TableRow>
@@ -179,7 +179,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
           {result!.hotels.slice(this.state.page * this.state.itemPerPage, 
                                 ((this.state.page + 1) * this.state.itemPerPage))
           .map((htl: hotel) => 
-          <Grid item md={4} sm={6} xs={12} key={htl.id}>
+          <Grid item lg={3} md={4} sm={6} xs={12} key={htl.id}>
             <Link 
               to={`/hotels/${this.state.country}/${this.state.city}/${htl.id}/rooms`
                 + `?cin=${query.cin}&cout=${query.cout}&rooms=${query.rooms}`} 
@@ -231,7 +231,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
             </TableRow>
           </TableFooter>
         </Table>
-        </section>
+        </section> : <label>no available hotel found</label>)
         : <label>Search your hotels</label>
 
       }
