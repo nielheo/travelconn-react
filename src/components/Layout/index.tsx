@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { withRouter, RouteComponentProps } from 'react-router';
 
 import LeftMenu from './LeftMenu';
 
@@ -14,6 +15,8 @@ import Drawer from 'material-ui/Drawer';
 import Paper from 'material-ui/Paper';
 import Grid from 'material-ui/Grid';
 import Hidden from 'material-ui/Hidden';
+
+import { isHideMenu } from '../functions';
 
 export interface LayoutProps {
     children?: React.ReactNode;
@@ -46,7 +49,9 @@ const styles = {
   },
 };
 
-type PropsWithStyles = LayoutProps & WithStyles<'root' | 'flex' | 'menuButton' | 'body' | 'menu' | 'content' >;
+type PropsWithStyles = LayoutProps 
+  & WithStyles<'root' | 'flex' | 'menuButton' | 'body' | 'menu' | 'content' > 
+  & RouteComponentProps<LayoutProps>;
 
 class Layout extends React.Component<PropsWithStyles, 
   {auth: boolean, 
@@ -80,16 +85,21 @@ class Layout extends React.Component<PropsWithStyles,
     });
   }
 
+  _isHideMenu = () => {
+    return isHideMenu(this.props.location.pathname);
+  }
+
   public render() {
     const {classes} = this.props;
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
+
     return (
       <section>
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Hidden mdUp>
+          <Hidden mdUp={!this._isHideMenu()}>
             <IconButton 
               className={classes.menuButton} 
               color="inherit" 
@@ -147,12 +157,12 @@ class Layout extends React.Component<PropsWithStyles,
     </div>
     <div className={classes.body}>
       <Grid container={true}>
-        <Hidden smDown={true}>
+        <Hidden smDown={!this._isHideMenu()} xlDown={this._isHideMenu()}>
           <Grid item md={2} >
             <Paper className={classes.menu}><LeftMenu /></Paper>
           </Grid> 
         </Hidden>
-        <Grid item xs={12} md={10} >
+        <Grid item xs={12} md={this._isHideMenu() ? 12 : 10} >
           <Paper className={classes.content} elevation={0}>{this.props.children}</Paper>
         </Grid>  
       </Grid>
@@ -160,5 +170,7 @@ class Layout extends React.Component<PropsWithStyles,
   } 
 }
 
-export default withStyles(styles)(Layout);
+const layoutWithStyles = withStyles(styles)(Layout);
+
+export default withRouter(layoutWithStyles);
 import { MouseEvent } from 'react';
