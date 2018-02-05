@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import * as queryString from 'query-string';
+import * as Scroll from 'react-scroll';
 
 import { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
@@ -10,9 +11,10 @@ import { withStyles, WithStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
 import Card, { CardContent, CardMedia } from 'material-ui/Card';
-import Table, { TableRow, TableFooter, TableHead, TablePagination } from 'material-ui/Table';
+import Table, { TableRow, TableFooter, TablePagination } from 'material-ui/Table';
 
 import { room, hotelResult, hotel } from '../types';
+import { ToFinance } from '../functions';
 
 interface Props {
 }
@@ -20,6 +22,8 @@ interface Props {
 type PropsWithStyles = Props & RouteComponentProps<{
   country: string
   city: string
+  locale: string
+  curr: string
 }> & WithStyles<'root' | 'paper' | 'control' | 'card' | 'media' | 'cardAction' | 'pagingBottom'
   | 'pagingTop' | 'noLink' >;
 
@@ -54,6 +58,8 @@ const styles = (theme: Theme) => ({
 class HotelsAvail extends React.Component<PropsWithStyles, {
   country: string,
   city: string,
+  locale: string,
+  curr: string,
   checkIn: Date,
   checkOut: Date,
   rooms: room[],
@@ -70,6 +76,8 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
       checkIn: moment(query.cin, 'YYYYMMDD').toDate(),
       checkOut: moment(query.cout, 'YYYYMMDD').toDate(),
       rooms: this._text2Rooms(query.rooms),
+      locale: this.props.match.params.locale || 'en-us',
+      curr: query.curr || 'usd',
       result: undefined,
       page: 0,
       itemPerPage: 24,
@@ -116,8 +124,18 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
         });
   }
 
+  componentDidUpdate () {
+    let scroll = Scroll.animateScroll;
+    scroll.scrollToTop({
+      duration: 1200,
+      delay: 300,
+      smooth: true
+    });
+  }
+
   handleChangePage = (e: MouseEvent<HTMLButtonElement>, newPage: number) => { 
     if (this.state.page !== newPage) {
+      
       this.setState({page: newPage});
     }
   }
@@ -129,7 +147,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
       + `${this.state.country}/${this.state.city}`
       + `?checkin=${moment(this.state.checkIn).format('DD-MMM-YYYY')}`
       + `&checkout=${moment(this.state.checkOut).format('DD-MMM-YYYY')}`
-      + `&rooms=${query.rooms}`;
+      + `&rooms=${query.rooms}&locale=${this.state.locale}&currency=${this.state.curr}`;
 
     this._sendRequest(url).then(r => {
       if (r) {
@@ -148,33 +166,11 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
     return (
     <div>
       <Typography type="display1" gutterBottom>
-        Hotel in {this.props.match.params.city}, {this.props.match.params.country}
+        {result && result.hotels && result.hotels.length || 0} hotels in {this.props.match.params.city}
+        , {this.props.match.params.country}
       </Typography>
       { this.state.result 
         ? (this.state.result.hotels ? <section>
-          <Table>
-          <TableHead>
-            <TableRow>
-              <TablePagination
-                colSpan={1}
-                count={result!.hotels.length}
-                rowsPerPage={this.state.itemPerPage}
-                page={this.state.page}
-                backIconButtonProps={{
-                  'aria-label': 'Previous Page',
-                }}
-                nextIconButtonProps={{
-                  'aria-label': 'Next Page',
-                }}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                className={classes.pagingTop}
-                labelRowsPerPage={''}
-                rowsPerPageOptions={[]}
-              />
-            </TableRow>
-          </TableHead>
-        </Table>
           <Grid container className={classes.root} spacing={16} >
           {result!.hotels.slice(this.state.page * this.state.itemPerPage, 
                                 ((this.state.page + 1) * this.state.itemPerPage))
@@ -190,7 +186,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
                 <CardMedia
                   className={classes.media}
                   image={htl.thumbnail.replace('_s.', '_b.')}
-                  title="Contemplative Reptile"
+                  title={htl.name}
                 />
                 <CardContent>
                   <Typography type="headline" component="h2" color="primary">
@@ -200,7 +196,9 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
                     <span dangerouslySetInnerHTML={this._rawMarkup(htl.shortDesc)} />
                   </Typography>
                   <Typography type="headline" component="p" color="secondary" align={'right'}>
-                    {htl.hotelRooms[0].chargeableRate.currency} {htl.hotelRooms[0].chargeableRate.total}
+                    {ToFinance( htl.hotelRooms[0].chargeableRate.currency,
+                                htl.hotelRooms[0].chargeableRate.total, 
+                                this.state.locale)}
                   </Typography>
                 </CardContent>
               </Card>

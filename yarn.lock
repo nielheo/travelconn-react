@@ -66,6 +66,12 @@
     "@types/history" "*"
     "@types/react" "*"
 
+"@types/react-scroll@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@types/react-scroll/-/react-scroll-1.5.2.tgz#bd1adc45f09d373a5779f954cbf11f9776a47000"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-swipeable-views@^0.12.0":
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/@types/react-swipeable-views/-/react-swipeable-views-0.12.0.tgz#36494b35911038bdbc962b451486de6dfa089d71"
@@ -1297,6 +1303,10 @@ cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   resolved "https://registry.yarnpkg.com/cssstyle/-/cssstyle-0.2.37.tgz#541097234cb2513c83ceed3acddc27ff27987d54"
   dependencies:
     cssom "0.3.x"
+
+currency-symbol-map@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/currency-symbol-map/-/currency-symbol-map-4.0.3.tgz#2aa2359209383b30612a6fc1f1ccaf5fa4b679bc"
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -5010,6 +5020,12 @@ react-scripts-ts@2.13.0:
     whatwg-fetch "2.0.3"
   optionalDependencies:
     fsevents "1.1.2"
+
+react-scroll@^1.7.6:
+  version "1.7.6"
+  resolved "https://registry.yarnpkg.com/react-scroll/-/react-scroll-1.7.6.tgz#826102e6a9de30142cd8450f190b0fed87171ff6"
+  dependencies:
+    prop-types "^15.5.8"
 
 react-scrollbar-size@^2.0.2:
   version "2.1.0"
