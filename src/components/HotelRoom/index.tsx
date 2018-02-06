@@ -1,11 +1,13 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import * as queryString from 'query-string';
+import { compose } from 'recompose';
 
 import { RouteComponentProps } from 'react-router';
 import { Theme } from 'material-ui/styles/createMuiTheme';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
+import withWidth from 'material-ui/utils/withWidth';
 
 import { room, hotelRoomResult } from '../types';
 
@@ -152,4 +154,4 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
   }
 }
 
-export default withStyles(styles)(HotelsAvail);
+export default compose(withStyles(styles), withWidth())(HotelsAvail);
