@@ -25,17 +25,20 @@ export interface LayoutProps {
 const styles = {
   root: {
     width: '100%',
+    margin: 0,
+    padding: 0,
   },
   flex: {
     flex: 1,
   },
   menuButton: {
-    marginLeft: -12,
+     marginLeft: -12,
     marginRight: 20,
   },
   body: {
-    flexGrow: 1,
-    margin: 6,
+    width: '100%',
+    margin: 0,
+    padding: 0,
   },
   menu: {
     textAlign: 'left',
@@ -43,7 +46,7 @@ const styles = {
     margin: 0,
   },
   content: {
-    padding: 16,
+    padding: 0,
     margin: 0,
     textAlign: 'left',
   },
@@ -156,14 +159,14 @@ class Layout extends React.Component<PropsWithStyles,
       </AppBar>
     </div>
     <div className={classes.body}>
-      <Grid container={true}>
+      <Grid container={true} style={{margin: 0, padding: 0, width: '100%'}}>
         <Hidden smDown={!this._isHideMenu()} xlDown={this._isHideMenu()}>
-          <Grid item md={2} >
+          <Grid item md={2} style={{margin: 0, padding: 0}}>
             <Paper className={classes.menu}><LeftMenu /></Paper>
           </Grid> 
         </Hidden>
-        <Grid item xs={12} md={this._isHideMenu() ? 12 : 10} >
-          <Paper className={classes.content} elevation={0}>{this.props.children}</Paper>
+        <Grid xs={12} md={this._isHideMenu() ? 12 : 10} className={classes.content}>
+          <div style={{padding: this._isHideMenu() ? 0 : 16}}> {this.props.children}</div>
         </Grid>  
       </Grid>
     </div></section>);
