@@ -24,12 +24,19 @@ type PropsWithStyles = Props & RouteComponentProps<{
   city: string
   locale: string
   curr: string
-}> & WithStyles<'root' | 'paper' | 'control' | 'card' | 'media' | 'cardAction' | 'pagingBottom'
-  | 'pagingTop' | 'noLink' >;
+}> & WithStyles<'root' | 'gridRoot' | 'paper' | 'control' | 'card' | 'media' | 'cardAction' | 'pagingBottom'
+  | 'pagingTop' | 'noLink' | 'content' >;
 
 const styles = (theme: Theme) => ({
   root: {
-    flexGrow: 1,
+    width: '100%',
+    padding: 0,
+    margin: 0,
+  },
+  gridRoot: {
+    padding: 0,
+    margin: 0,
+    width: '100%',
   },
   paper: {
     width: '100%',
@@ -164,14 +171,16 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
     let {classes} = this.props;
     let query = queryString.parse(this.props.location.search);
     return (
-    <div>
-      <Typography type="display1" gutterBottom>
-        {result && result.hotels && result.hotels.length || 0} hotels in {this.props.match.params.city}
-        , {this.props.match.params.country}
-      </Typography>
+    <div className={classes.root}>
+      <div>
+        <Typography type="display1" gutterBottom>
+          {result && result.hotels && result.hotels.length || 0} hotels in {this.props.match.params.city}
+          , {this.props.match.params.country}
+        </Typography>
+      </div>
       { this.state.result 
-        ? (this.state.result.hotels ? <section>
-          <Grid container className={classes.root} spacing={16} >
+        ? (this.state.result.hotels ? <div>
+          <Grid container className={classes.gridRoot} spacing={16}  >
           {result!.hotels.slice(this.state.page * this.state.itemPerPage, 
                                 ((this.state.page + 1) * this.state.itemPerPage))
           .map((htl: hotel) => 
@@ -229,7 +238,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
             </TableRow>
           </TableFooter>
         </Table>
-        </section> : <label>no available hotel found</label>)
+        </div> : <label>no available hotel found</label>)
         : <label>Search your hotels</label>
 
       }

@@ -21,6 +21,8 @@ const styles = (theme: Theme) => ({
   root: {
     width: '100%',
     maxWidth: 360,
+    padding: 0,
+    margin: 0,
     backgroundColor: theme.palette.background.paper,
   },
   nested: {

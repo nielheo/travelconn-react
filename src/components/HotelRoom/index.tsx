@@ -1,53 +1,63 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import * as queryString from 'query-string';
-import { compose } from 'recompose';
 
 import { RouteComponentProps } from 'react-router';
 import { Theme } from 'material-ui/styles/createMuiTheme';
-import { withStyles, WithStyles } from 'material-ui/styles';
+import { withStyles, WithStyles, StyleRulesCallback } from 'material-ui/styles';
+import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
-import withWidth from 'material-ui/utils/withWidth';
+import GridList, { GridListTile, GridListTileBar } from 'material-ui/GridList';
+import withWidth, { WithWidthProps } from 'material-ui/utils/withWidth';
+import { compose } from 'recompose';
 
 import { room, hotelRoomResult } from '../types';
 
 interface Props {
 }
 
+type ClassNames =
+  | 'root'
+  | 'gridListWrapper'
+  | 'gridList'
+  | 'title'
+  | 'titleBar';
+
+const styles: StyleRulesCallback<ClassNames> = (theme: Theme) => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+    margin: 0,
+    padding: 0,
+  },
+  gridList: {
+    flexWrap: 'nowrap',
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
+    margin: 0,
+    padding: 0,
+  },
+  gridListWrapper: {
+    margin: 0,
+    padding: 0,
+  },
+  title: {
+    color: theme.palette.primary,
+  },
+  titleBar: {
+  //  background:
+  //    'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+  },
+});
+
 type PropsWithStyles = Props & RouteComponentProps<{
   country: string
   city: string
   id: string
-}> & WithStyles<'root' | 'paper' | 'control' | 'card' | 'media' | 'cardAction' | 'pagingBottom'
-  | 'pagingTop' | 'noLink' >;
-
-const styles = (theme: Theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    width: '100%',
-    marginTop: 16,
-  },
-  control: {
-    padding: theme.spacing.unit * 2,
-  },
-  media: {
-    height: 200,
-  },
-  cardAction: {
-    width: '100%',
-  },
-  pagingBottom: {
-    marginTop: 16,
-  },
-  pagingTop: {
-    marginBottom: 16,
-  },
-  noLink: {
-    textDecoration: 'none'
-  }
-});
+}> & WithStyles<ClassNames> & WithWidthProps;
 
 class HotelsAvail extends React.Component<PropsWithStyles, {
   country: string,
@@ -136,6 +146,13 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
 
   public render() {
     let {result} = this.state;
+    let {classes, width} = this.props;
+    let imgIndex = 0;
+
+    let imgCols = width === 'xs' ? 1 : 3.5;
+    if (width === 'sm') {imgCols = 2; }
+
+    console.log(this.props.width);
     if (!result ) {
       return ( 
       <Typography type="title" gutterBottom>
@@ -145,11 +162,35 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
     }
 
     return (
-    <div>
-      { result && <Typography type="display1" gutterBottom>
-        {result.hotelDetail.name}
-      </Typography>
-      }
+    <div className={classes.root}>
+      { result && <div className={classes.root}>
+      
+      <Grid container md={12} className={classes.gridListWrapper}>
+        <GridList cellHeight={200} className={classes.gridList} cols={imgCols}>
+          {result.hotelDetail.hotelImages.map(tile => (
+            <GridListTile 
+              key={imgIndex++} 
+              cols={1} 
+            >
+              <img src={tile.highResUrl} alt={tile.caption} />
+              <GridListTileBar
+                title={tile.caption}
+                classes={{
+                  root: classes.titleBar,
+                  title: classes.title,
+                }}
+                
+              />
+            </GridListTile>
+          ))}
+        </GridList>
+      </Grid>
+      <Grid container md={12} style={{padding: 16}}>
+        <Typography type="display1" gutterBottom>
+          {result.hotelDetail.name}
+        </Typography>
+      </Grid>
+    </div>}
     </div>);
   }
 }
