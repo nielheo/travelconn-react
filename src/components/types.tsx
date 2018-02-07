@@ -1,14 +1,20 @@
-export var currencySymbols = {
-  'usd': '$', // US Dollar
-  'eur': '€', // Euro
-  'gbp': '£', // British Pound Sterling
-  'idr': 'Rp', // Indonesian Rupiah
-  'jpy': '¥', // Japanese Yen
-  'krw': '₩', // South Korean Won
-  'thb': '฿', // Thai Baht
-  'cny': '¥', // China Yuan Renminbi
-  'twd': 'NT$', // Taiwan New Dollar
+export type currency = {
+  code: string,
+  symbol: string,
+  text: string,
 };
+
+export var currencies: currency[] = [
+  { code: 'usd', symbol: '$', text: 'US Dollar' },
+  { code: 'eur', symbol: '€', text: 'Euro' },
+  { code: 'gbp', symbol: '£', text: 'British Pound Sterling' },
+  { code: 'idr', symbol: 'Rp', text: 'Indonesian Rupiah' },
+  { code: 'jpy', symbol: '¥', text: 'Japanese Yen' },
+  { code: 'krw', symbol: '₩', text: 'South Korean Won' },
+  { code: 'thb', symbol: '฿', text: 'Thai Baht' },
+  { code: 'cny', symbol: '¥', text: 'China Yuan Renminbi' },
+  { code: 'twd', symbol: 'NT$', text: 'Taiwan New Dollar' },
+];  
 
 export type language = {
   code: string,

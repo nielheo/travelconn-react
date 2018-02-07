@@ -171,7 +171,7 @@ class Layout extends React.Component<PropsWithStyles,
             <Paper className={classes.menu}><LeftMenu /></Paper>
           </Grid> 
         </Hidden>
-        <Grid item xs={12} md={this._isHideMenu() ? 12 : 10} className={classes.content}>
+        <Grid item={false} xs={12} md={this._isHideMenu() ? 12 : 10} className={classes.content}>
           <div style={{padding: this._isHideMenu() ? 0 : 16}}> {this.props.children}</div>
         </Grid>  
       </Grid>

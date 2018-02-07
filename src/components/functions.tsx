@@ -1,4 +1,4 @@
-import { currencySymbols } from './types';
+import { currencies, currency } from './types';
 
 export function isHideMenu (url: string) {
     let patt = new RegExp(`/hotels\/(.*?)\/(.*?)\/(.*?)\/rooms`);
@@ -8,7 +8,8 @@ export function isHideMenu (url: string) {
 }
 
 export function ToFinance(curr: string, value: number, locale: string) {
-    var curr1: string = curr.toUpperCase();
-    let currSymbol = currencySymbols[curr1] || curr1;
+    var curr1: string = curr.toLowerCase();
+    let selectedCurr = currencies.find((cr: currency) => cr.code === curr1);
+    let currSymbol = selectedCurr && selectedCurr.symbol || '';
     return currSymbol + ' ' + value.toLocaleString(locale);
 }

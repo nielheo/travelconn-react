@@ -35,19 +35,6 @@ class LanguageMenu extends React.Component<PropsWithStyles, {
     this.state = {anchorEl: undefined};
   }
 
-  _languageChange = () => {
-    let code = this.props.countryCode.toUpperCase();
-    if (code === 'US') {
-      this.props.onChange('JP');
-    } else if (code === 'JP') {
-      this.props.onChange('KR');
-    } else if (code === 'KR') {
-      this.props.onChange('ID');
-    } else {
-      this.props.onChange('US');
-    }
-  }
-
   _handleClose = () => {
     this.setState({ anchorEl: undefined });
   }
