@@ -14,6 +14,7 @@ import Table, { TableRow, TableFooter, TablePagination } from 'material-ui/Table
 import { room, hotelResult, hotel, languages, language } from '../types';
 
 import HotelCard from './HotelCard';
+import EmptyHotelCard from './EmptyHotelCard';
 import LanguageMenu from './LanguageMenu';
 import CurrencyMenu from './CurrencyMenu';
 
@@ -218,6 +219,10 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
     let {result} = this.state;
     let {classes} = this.props;
     let query = queryString.parse(this.props.location.search);
+    let emptyList: string[] = [];
+    for (let i = 0; i < 24; i++) {
+      emptyList.push(i.toString());
+    }
     return (
     <div className={classes.root}>
       <div>
@@ -273,8 +278,12 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
           </TableFooter>
         </Table>
         </div> : <label>no available hotel found</label>)
-        : <label>Search your hotels</label>
-
+        : <div>
+            <label>Search your hotels</label>
+            {<Grid container className={classes.gridRoot} spacing={16}  >
+              {emptyList.map((i: string) => <EmptyHotelCard key={i} />)}
+            </Grid>}
+          </div>
       }
     </div>);
   }
