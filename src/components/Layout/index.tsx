@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import LeftMenu from './LeftMenu';
 
@@ -32,7 +33,7 @@ const styles = {
     flex: 1,
   },
   menuButton: {
-     marginLeft: -12,
+    marginLeft: -12,
     marginRight: 20,
   },
   body: {
@@ -50,10 +51,14 @@ const styles = {
     margin: 0,
     textAlign: 'left',
   },
+  headerLink: {
+    color: '#fff',
+    textDecoration: 'none',
+  }
 };
 
 type PropsWithStyles = LayoutProps 
-  & WithStyles<'root' | 'flex' | 'menuButton' | 'body' | 'menu' | 'content' > 
+  & WithStyles<'root' | 'flex' | 'menuButton' | 'body' | 'menu' | 'content' | 'headerLink' > 
   & RouteComponentProps<LayoutProps>;
 
 class Layout extends React.Component<PropsWithStyles, 
@@ -109,7 +114,7 @@ class Layout extends React.Component<PropsWithStyles,
               aria-label="Menu" 
               onClick={this._toggleDrawer(true)}
             >
-                <MenuIcon/>
+              <MenuIcon/>
             </IconButton>
             <Drawer open={this.state.left} onClose={this._toggleDrawer(false)}>
               <div
@@ -123,7 +128,9 @@ class Layout extends React.Component<PropsWithStyles,
             </Drawer>
           </Hidden>
           <Typography type="title" color="inherit" className={classes.flex}>
-            TravelConn
+            <Link to="/" className={classes.headerLink}>
+              TravelConn
+            </Link>
           </Typography>
           {auth && (
           <div>
@@ -132,7 +139,6 @@ class Layout extends React.Component<PropsWithStyles,
               aria-haspopup="true"
               onClick={this.handleMenu}
               color="inherit"
-              
             >
               <AccountCircle />
             </IconButton>
@@ -165,7 +171,7 @@ class Layout extends React.Component<PropsWithStyles,
             <Paper className={classes.menu}><LeftMenu /></Paper>
           </Grid> 
         </Hidden>
-        <Grid xs={12} md={this._isHideMenu() ? 12 : 10} className={classes.content}>
+        <Grid item xs={12} md={this._isHideMenu() ? 12 : 10} className={classes.content}>
           <div style={{padding: this._isHideMenu() ? 0 : 16}}> {this.props.children}</div>
         </Grid>  
       </Grid>

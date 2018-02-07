@@ -1,3 +1,36 @@
+export var currencySymbols = {
+  'usd': '$', // US Dollar
+  'eur': '€', // Euro
+  'gbp': '£', // British Pound Sterling
+  'idr': 'Rp', // Indonesian Rupiah
+  'jpy': '¥', // Japanese Yen
+  'krw': '₩', // South Korean Won
+  'thb': '฿', // Thai Baht
+  'cny': '¥', // China Yuan Renminbi
+  'twd': 'NT$', // Taiwan New Dollar
+};
+
+export type language = {
+  code: string,
+  locale: string,
+  text: string,
+};
+
+export var languages: language[] = [
+  { code: 'US', locale: 'en-US', text: 'English' },
+  { code: 'CN', locale: 'zh-CN', text: '简体中文' },
+  { code: 'DE', locale: 'de-DE', text: 'Deutsch' },
+  { code: 'ES', locale: 'es-ES', text: 'Español' },
+  { code: 'FR', locale: 'fr-FR', text: 'Français' },
+  { code: 'ID', locale: 'id-ID', text: 'Bahasa Indonesia' },
+  { code: 'IT', locale: 'it-IT', text: 'Italiano' },
+  { code: 'JP', locale: 'ja-JP', text: '日本語' },
+  { code: 'KR', locale: 'ko-KR', text: '한국어' },
+  { code: 'TH', locale: 'th-TH', text: 'ภาษาไทย' },
+  { code: 'TW', locale: 'zh-TW', text: '繁體中文 (台灣)' },
+  { code: 'PT', locale: 'pt-PT', text: 'Português' },
+];
+
 export type room = {
   adult: number,
   childAges?: number[],
@@ -28,6 +61,9 @@ export type hotelResult = {
   checkIn: Date,
   checkOut: Date,
   hotels: hotel[],
+  cacheKey: string,
+  cacheLocation: string,
+  requestKey: string,
 };
 
 export type propertyAmenity = {

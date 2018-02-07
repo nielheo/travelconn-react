@@ -4,17 +4,18 @@ import * as queryString from 'query-string';
 import * as Scroll from 'react-scroll';
 
 import { MouseEvent } from 'react';
-import { Link } from 'react-router-dom';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, withRouter } from 'react-router';
 import { Theme } from 'material-ui/styles/createMuiTheme';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
-import Card, { CardContent, CardMedia } from 'material-ui/Card';
 import Table, { TableRow, TableFooter, TablePagination } from 'material-ui/Table';
 
-import { room, hotelResult, hotel } from '../types';
-import { ToFinance } from '../functions';
+import { room, hotelResult, hotel, languages, language } from '../types';
+
+import HotelCard from './HotelCard';
+import LanguageMenu from './LanguageMenu';
+import CurrencyMenu from './CurrencyMenu';
 
 interface Props {
 }
@@ -24,8 +25,7 @@ type PropsWithStyles = Props & RouteComponentProps<{
   city: string
   locale: string
   curr: string
-}> & WithStyles<'root' | 'gridRoot' | 'paper' | 'control' | 'card' | 'media' | 'cardAction' | 'pagingBottom'
-  | 'pagingTop' | 'noLink' | 'content' >;
+}> & WithStyles<'root' | 'gridRoot' | 'pagingBottom'>;
 
 const styles = (theme: Theme) => ({
   root: {
@@ -38,28 +38,9 @@ const styles = (theme: Theme) => ({
     margin: 0,
     width: '100%',
   },
-  paper: {
-    width: '100%',
-    marginTop: 16,
-  },
-  control: {
-    padding: theme.spacing.unit * 2,
-  },
-  media: {
-    height: 200,
-  },
-  cardAction: {
-    width: '100%',
-  },
   pagingBottom: {
     marginTop: 16,
   },
-  pagingTop: {
-    marginBottom: 16,
-  },
-  noLink: {
-    textDecoration: 'none'
-  }
 });
 
 class HotelsAvail extends React.Component<PropsWithStyles, {
@@ -107,8 +88,52 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
     return rooms;
   }
 
-  _rawMarkup = (content: string) => {
-    return { __html: content };
+  _loadHotel = () => {
+    let query = queryString.parse(this.props.location.search);
+    let url = `https://travelconnapi.azurewebsites.net/api/hotels/` 
+      + `${this.state.country}/${this.state.city}`
+      + `?checkin=${moment(this.state.checkIn).format('DD-MMM-YYYY')}`
+      + `&checkout=${moment(this.state.checkOut).format('DD-MMM-YYYY')}`
+      + `&rooms=${query.rooms}&locale=${this.state.locale}&currency=${this.state.curr}`
+      + `&numberofresult=200`;
+
+    this._sendRequest(url).then(r => {
+      if (r) {
+        this.setState({ result: r }, () => {if (r.cacheKey) {
+          this._getMore();
+        }});
+      }
+    });
+  }
+
+  _constructMoreRequest = () => {
+    let req = 'https://travelconnapi.azurewebsites.net/api/hotels/more'
+        + '?locale=' + this.state.locale
+        + '&currency=' + this.state.curr
+        + '&cacheKey=' + this.state.result!.cacheKey
+        + '&cacheLocation=' + this.state.result!.cacheLocation
+        + '&requestKey=' + this.state.result!.requestKey;
+    return req;
+  }
+
+  _getMore = () => {
+      this._sendRequest(this._constructMoreRequest()).then(rs => {
+          var result = this.state.result!;
+
+          if (rs.hotels && result) {
+            rs.hotels.map((htl: hotel) => {
+                result.hotels.push(htl);
+            });
+
+            result.cacheKey = rs.cacheKey;
+            result.cacheLocation = rs.cacheLocation;
+            result.requestKey = rs.requestKey;
+
+            this.setState({ result: result });
+
+            if (this.state.result!.cacheKey) { this._getMore(); }
+          }
+      });
   }
 
   _sendRequest = (url: string) => {
@@ -131,7 +156,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
         });
   }
 
-  componentDidUpdate () {
+  _scrollTop = () => {
     let scroll = Scroll.animateScroll;
     scroll.scrollToTop({
       duration: 1200,
@@ -140,29 +165,52 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
     });
   }
 
+  _onCurrChange = (curr: string) => {
+    if (curr !== this.state.curr) {
+      let query = queryString.parse(this.props.location.search);
+      let url = `/${this.state.locale}/hotels/${this.state.country}/${this.state.city}/avail`
+        + `?cin=${moment(this.state.checkIn).format('YYYYMMDD')}`
+        + `&cout=${moment(this.state.checkOut).format('YYYYMMDD')}`
+        + `&rooms=${query.rooms}&curr=${curr}`;
+      this.props.history.push(url);
+    }
+  }
+
+  _onLanguageChange = (countryCode: string) => {
+    let lang = 
+      languages.find((lan: language) => lan.code === countryCode.toUpperCase());
+    
+    let nextLocale: string = lang && lang.locale || 'en-US';
+    
+    if (nextLocale.toLowerCase() !== this.state.locale.toLowerCase()) {
+      let query = queryString.parse(this.props.location.search);
+      let url = `/${nextLocale}/hotels/${this.state.country}/${this.state.city}/avail`
+        + `?cin=${moment(this.state.checkIn).format('YYYYMMDD')}`
+        + `&cout=${moment(this.state.checkOut).format('YYYYMMDD')}`
+        + `&rooms=${query.rooms}&curr=${this.state.curr}`;
+
+      this.props.history.push(url);
+    }
+  }
+
   handleChangePage = (e: MouseEvent<HTMLButtonElement>, newPage: number) => { 
     if (this.state.page !== newPage) {
-      
-      this.setState({page: newPage});
+      this.setState({page: newPage}, () => this._scrollTop());
     }
   }
   handleChangeRowsPerPage = () => { };
 
   componentDidMount() {
-    let query = queryString.parse(this.props.location.search);
-    let url = `https://travelconnapi.azurewebsites.net/api/hotels/` 
-      + `${this.state.country}/${this.state.city}`
-      + `?checkin=${moment(this.state.checkIn).format('DD-MMM-YYYY')}`
-      + `&checkout=${moment(this.state.checkOut).format('DD-MMM-YYYY')}`
-      + `&rooms=${query.rooms}&locale=${this.state.locale}&currency=${this.state.curr}`;
+    this._loadHotel();
+  }
 
-    this._sendRequest(url).then(r => {
-      if (r) {
-          this.setState({ result: r });
-          // if (r.cacheKey) {
-          //     this._getMore()
-          //  }
-      }
+  componentWillReceiveProps() {
+    this.setState({result: undefined}, () => {
+      let query = queryString.parse(this.props.location.search);
+      this.setState({ curr: query.curr || 'usd',
+                      locale: this.props.match.params.locale || 'en-us'
+                    }, 
+                    () => this._loadHotel());
     });
   }
 
@@ -173,48 +221,34 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
     return (
     <div className={classes.root}>
       <div>
-        <Typography type="display1" gutterBottom>
-          {result && result.hotels && result.hotels.length || 0} hotels in {this.props.match.params.city}
-          , {this.props.match.params.country}
-        </Typography>
+        <Grid container spacing={0} style={{width: '100%'}}>
+          <Grid item style={{flex: 1}}>
+            <Typography type="display1" gutterBottom>
+              {result && result.hotels && 
+                result.hotels.length.toLocaleString('en-us') || 0} hotels in {this.props.match.params.city}
+              , {this.props.match.params.country}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <LanguageMenu countryCode={this.state.locale.split('-')[1]} onChange={this._onLanguageChange} />
+          </Grid>
+          <Grid item style={{marginRight: 10, marginTop: 4}}>
+            <CurrencyMenu curr={this.state.curr} onChange={this._onCurrChange} />
+          </Grid>
+        </Grid>
       </div>
       { this.state.result 
         ? (this.state.result.hotels ? <div>
           <Grid container className={classes.gridRoot} spacing={16}  >
-          {result!.hotels.slice(this.state.page * this.state.itemPerPage, 
-                                ((this.state.page + 1) * this.state.itemPerPage))
-          .map((htl: hotel) => 
-          <Grid item lg={3} md={4} sm={6} xs={12} key={htl.id}>
-            <Link 
-              to={`/hotels/${this.state.country}/${this.state.city}/${htl.id}/rooms`
-                + `?cin=${query.cin}&cout=${query.cout}&rooms=${query.rooms}`} 
-              className={classes.noLink} 
-              target="_blank"
-            >
-              <Card className={classes.card} >
-                <CardMedia
-                  className={classes.media}
-                  image={htl.thumbnail.replace('_s.', '_b.')}
-                  title={htl.name}
-                />
-                <CardContent>
-                  <Typography type="headline" component="h2" color="primary">
-                    {htl.name}
-                  </Typography>
-                  <Typography component="p">
-                    <span dangerouslySetInnerHTML={this._rawMarkup(htl.shortDesc)} />
-                  </Typography>
-                  <Typography type="headline" component="p" color="secondary" align={'right'}>
-                    {ToFinance( htl.hotelRooms[0].chargeableRate.currency,
-                                htl.hotelRooms[0].chargeableRate.total, 
-                                this.state.locale)}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Link>
+            { result!.hotels.slice( this.state.page * this.state.itemPerPage, 
+                                    ((this.state.page + 1) * this.state.itemPerPage))
+                  .map((htl: hotel) => {
+                    let link = `/hotels/${this.state.country}/${this.state.city}/${htl.id}/rooms`
+                        + `?cin=${query.cin}&cout=${query.cout}&rooms=${query.rooms}`;
+                    return <HotelCard link={link} hotelDetail={htl} locale={this.state.locale} key={htl.id} />;
+                  })
+            }
           </Grid>
-        )}
-        </Grid>
         <Table>
           <TableFooter>
             <TableRow>
@@ -246,4 +280,4 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
   }
 }
 
-export default withStyles(styles)(HotelsAvail);
+export default withRouter(withStyles(styles)(HotelsAvail));
