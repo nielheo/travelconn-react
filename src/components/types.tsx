@@ -90,6 +90,7 @@ export type valueAdd = {
 };
 
 export type roomDetail = {
+  rateCode: string,
   rateDesc: string,
   roomTypeDesc: string,
   roomTypeDescLong: string,
@@ -107,7 +108,7 @@ export type hotelDetail = {
   starRating: number,
   city: string,
   country: string,
-  checkInInstruction: string,
+  checkInInstructions: string,
   propertyDescription: string,
   areaInformation: string,
   roomInformation: string,
@@ -122,4 +123,5 @@ export type hotelRoomResult = {
   locale: string,
   currency: string,
   hotelDetail: hotelDetail,
+  rooms: roomDetail[],
 };

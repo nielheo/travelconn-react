@@ -220,7 +220,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
     let {classes} = this.props;
     let query = queryString.parse(this.props.location.search);
     let emptyList: string[] = [];
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 12; i++) {
       emptyList.push(i.toString());
     }
     return (
@@ -248,8 +248,8 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
             { result!.hotels.slice( this.state.page * this.state.itemPerPage, 
                                     ((this.state.page + 1) * this.state.itemPerPage))
                   .map((htl: hotel) => {
-                    let link = `/hotels/${this.state.country}/${this.state.city}/${htl.id}/rooms`
-                        + `?cin=${query.cin}&cout=${query.cout}&rooms=${query.rooms}`;
+                    let link = `/${this.state.locale}/hotels/${this.state.country}/${this.state.city}/${htl.id}/rooms`
+                        + `?cin=${query.cin}&cout=${query.cout}&rooms=${query.rooms}&curr=${this.state.curr}`;
                     return <HotelCard link={link} hotelDetail={htl} locale={this.state.locale} key={htl.id} />;
                   })
             }

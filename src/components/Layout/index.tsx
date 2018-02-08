@@ -170,14 +170,17 @@ class Layout extends React.Component<PropsWithStyles,
           <Grid item md={2} style={{margin: 0, padding: 0}}>
             <Paper className={classes.menu}><LeftMenu /></Paper>
           </Grid> 
+          <Grid item xs={12} md={this._isHideMenu() ? 12 : 10} className={classes.content}>
+            <div style={{padding: this._isHideMenu() ? 0 : 16}}> {this.props.children}</div>
+          </Grid>  
         </Hidden>
-        <Grid item={false} xs={12} md={this._isHideMenu() ? 12 : 10} className={classes.content}>
-          <div style={{padding: this._isHideMenu() ? 0 : 16}}> {this.props.children}</div>
-        </Grid>  
+        <Hidden smDown={this._isHideMenu()} xlDown={!this._isHideMenu()}>
+          <div style={{padding: this._isHideMenu() ? 0 : 16}}>{this.props.children}</div>
+        </Hidden>
       </Grid>
     </div></section>);
   } 
-}
+} 
 
 const layoutWithStyles = withStyles(styles)(Layout);
 

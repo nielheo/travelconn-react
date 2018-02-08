@@ -18,6 +18,7 @@ const routes = (
       <Route exact path="/newbooking" component={NewBooking} />
       <Route exact path="/:locale/hotels/:country/:city/avail" component={HotelsAvail} />
       <Route exact path="/hotels/:country/:city/avail" component={HotelsAvail} />
+      <Route exact path="/:locale/hotels/:country/:city/:id/rooms" component={HotelRoom} />
       <Route exact path="/hotels/:country/:city/:id/rooms" component={HotelRoom} />
       <Route path="/hello" component={Hello} />
     </ScrollToTop>

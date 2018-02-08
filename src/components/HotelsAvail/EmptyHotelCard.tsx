@@ -9,6 +9,7 @@ import { withStyles, WithStyles } from 'material-ui/styles';
 const styles = () => ({
   media: {
     height: 200,
+    backgroundColor: '#CCCCCC',
   },
   noLink: {
     textDecoration: 'none'
@@ -36,31 +37,30 @@ class HotelCard extends React.Component<PropsWithStyles, {}> {
     let { classes } = this.props;
     return(
       <Grid item lg={3} md={4} sm={6} xs={12}>
-        
-          <Card >
-            <CardMedia
-              className={classes.media}
-              image={'/imgs/grey.png'}
-              title=""
-            />
-            <CardContent>
-              <Typography type="headline" component="h2" className={classes.hotelName}>
-                {'.'}
-              </Typography>
-              <Typography component="p" className={classes.hotelName}>
-                {'.'}
-              </Typography>
-              <Typography component="p" className={classes.hotelName}>
-                {'.'}
-              </Typography>
-              <Typography component="p" className={classes.hotelName}>
-                {'.'}
-              </Typography>
-              <Typography type="headline" component="p" className={classes.hotelName} align={'right'} >
-                {'.'}
-              </Typography>
-            </CardContent>
-          </Card>
+        <Card >
+          <CardMedia
+            className={classes.media}
+            image=""
+            title=""
+          />
+          <CardContent>
+            <Typography type="headline" component="h2" className={classes.hotelName}>
+              {'.'}
+            </Typography>
+            <Typography component="p" className={classes.hotelName}>
+              {'.'}
+            </Typography>
+            <Typography component="p" className={classes.hotelName}>
+              {'.'}
+            </Typography>
+            <Typography component="p" className={classes.hotelName}>
+              {'.'}
+            </Typography>
+            <Typography type="headline" component="p" className={classes.hotelName} align={'right'} >
+              {'.'}
+            </Typography>
+          </CardContent>
+        </Card>
       </Grid>
     );
   }
