@@ -27,6 +27,7 @@ type ClassNames =
   | 'titleBar'
   | 'section'
   | 'borderlessSection'
+  | 'sectionHeader'
   | 'roomPaper';
 
 const styles: StyleRulesCallback<ClassNames> = (theme: Theme) => ({
@@ -36,9 +37,10 @@ const styles: StyleRulesCallback<ClassNames> = (theme: Theme) => ({
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
-    margin: 0,
+    margin: 'auto',
     padding: 0,
     marginBottom: 24,
+    maxWidth: 1160,
   },
   gridList: {
     flexWrap: 'nowrap',
@@ -63,20 +65,30 @@ const styles: StyleRulesCallback<ClassNames> = (theme: Theme) => ({
     borderBottomStyle: 'solid',
     borderBottomColor: '#CCC',
     width: '100%',
-    paddingTop: 24,
-    paddingBottom: 24,
-    paddingLeft: 16,
-    paddingRight: 16,
-    marginLeft: 40,
-    marginRight: 40,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 0,
+    paddingRight: 0,
+    marginLeft: 0,
+    marginRight: 0,
   },
   borderlessSection: {
     width: '100%',
-    paddingTop: theme.spacing.unit * 3,
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
-    marginLeft: theme.spacing.unit * 2,
-    marginRight: theme.spacing.unit * 2,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 0,
+    paddingRight: 0,
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  sectionHeader: {
+    width: '100%',
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 0,
+    paddingRight: 0,
+    marginLeft: 8,
+    marginRight: 8,
   },
   roomPaper: {
     padding: 16,
@@ -229,7 +241,7 @@ class HotelRoom extends React.Component<PropsWithStyles, {
             ))}
           </GridList>
         </Grid>
-        <Grid container className={classes.borderlessSection} spacing={0}>
+        <Grid container className={classes.sectionHeader} spacing={0}>
           <Grid item xs={12}>
             <Typography type="headline" color="primary" gutterBottom>
               <b>{result.hotelDetail.name}</b>

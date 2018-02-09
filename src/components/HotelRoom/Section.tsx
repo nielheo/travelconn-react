@@ -22,12 +22,12 @@ const styles: StyleRulesCallback<ClassNames> = (theme: Theme) => ({
     borderBottomStyle: 'solid',
     borderBottomColor: '#CCC',
     width: '100%',
-    paddingTop: 24,
-    paddingBottom: 24,
-    paddingLeft: 16,
-    paddingRight: 16,
-    marginLeft: 40,
-    marginRight: 40,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 0,
+    paddingRight: 0,
+    marginLeft: 0,
+    marginRight: 0,
   },
 });
 
