@@ -1,3 +1,6 @@
+// export const rootUrl = 'https://travelconnapi.azurewebsites.net';
+export const rootUrl = 'http://localhost:6500';
+
 export type currency = {
   code: string,
   symbol: string,

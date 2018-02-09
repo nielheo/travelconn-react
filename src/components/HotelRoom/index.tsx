@@ -12,7 +12,7 @@ import GridList, { GridListTile, GridListTileBar } from 'material-ui/GridList';
 import withWidth, { WithWidthProps } from 'material-ui/utils/withWidth';
 import { compose } from 'recompose';
 
-import { room, hotelRoomResult, roomDetail } from '../types';
+import { room, hotelRoomResult, roomDetail, rootUrl } from '../types';
 import Section from './Section';
 import Room from './Room';
 
@@ -176,7 +176,7 @@ class HotelRoom extends React.Component<PropsWithStyles, {
 
   componentDidMount() {
     let query = queryString.parse(this.props.location.search);
-    let url = `https://travelconnapi.azurewebsites.net/api/hotels/` 
+    let url = `${rootUrl}/api/hotels/` 
       + `${this.state.country}/${this.state.city}/${this.state.id}/rooms`
       + `?checkin=${moment(this.state.checkIn).format('DD-MMM-YYYY')}`
       + `&checkout=${moment(this.state.checkOut).format('DD-MMM-YYYY')}`

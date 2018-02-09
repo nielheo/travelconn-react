@@ -11,7 +11,7 @@ import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
 import Table, { TableRow, TableFooter, TablePagination } from 'material-ui/Table';
 
-import { room, hotelResult, hotel, languages, language } from '../types';
+import { room, hotelResult, hotel, languages, language, rootUrl } from '../types';
 
 import HotelCard from './HotelCard';
 import EmptyHotelCard from './EmptyHotelCard';
@@ -91,7 +91,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
 
   _loadHotel = (scrollTop: boolean) => {
     let query = queryString.parse(this.props.location.search);
-    let url = `https://travelconnapi.azurewebsites.net/api/hotels/` 
+    let url = `${rootUrl}/api/hotels/` 
       + `${this.state.country}/${this.state.city}`
       + `?checkin=${moment(this.state.checkIn).format('DD-MMM-YYYY')}`
       + `&checkout=${moment(this.state.checkOut).format('DD-MMM-YYYY')}`
@@ -111,13 +111,13 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
   }
 
   _constructMoreRequest = () => {
-    let req = 'https://travelconnapi.azurewebsites.net/api/hotels/more'
+    let req = rootUrl + '/api/hotels/more'
         + '?locale=' + this.state.locale
         + '&currency=' + this.state.curr
         + '&cacheKey=' + this.state.result!.cacheKey
         + '&cacheLocation=' + this.state.result!.cacheLocation
         + '&requestKey=' + this.state.result!.requestKey;
-    return req;
+    return req; 
   }
 
   _getMore = () => {
