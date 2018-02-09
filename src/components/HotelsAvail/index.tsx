@@ -89,7 +89,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
     return rooms;
   }
 
-  _loadHotel = () => {
+  _loadHotel = (scrollTop: boolean) => {
     let query = queryString.parse(this.props.location.search);
     let url = `https://travelconnapi.azurewebsites.net/api/hotels/` 
       + `${this.state.country}/${this.state.city}`
@@ -100,9 +100,12 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
 
     this._sendRequest(url).then(r => {
       if (r) {
-        this.setState({ result: r }, () => {if (r.cacheKey) {
-          this._getMore();
-        }});
+        this.setState({ result: r }, () => {
+          this._scrollTop();
+          if (r.cacheKey) {
+            this._getMore();
+          }
+        });
       }
     });
   }
@@ -202,7 +205,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
   handleChangeRowsPerPage = () => { };
 
   componentDidMount() {
-    this._loadHotel();
+    this._loadHotel(true);
   }
 
   componentWillReceiveProps() {
@@ -211,7 +214,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
       this.setState({ curr: query.curr || 'usd',
                       locale: this.props.match.params.locale || 'en-us'
                     }, 
-                    () => this._loadHotel());
+                    () => this._loadHotel(true));
     });
   }
 
