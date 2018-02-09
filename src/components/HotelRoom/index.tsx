@@ -8,13 +8,13 @@ import { withStyles, WithStyles, StyleRulesCallback } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import GridList, { GridListTile, GridListTileBar } from 'material-ui/GridList';
-import Paper from 'material-ui/Paper';
 
 import withWidth, { WithWidthProps } from 'material-ui/utils/withWidth';
 import { compose } from 'recompose';
 
 import { room, hotelRoomResult, roomDetail } from '../types';
 import Section from './Section';
+import Room from './Room';
 
 interface Props {
 }
@@ -72,11 +72,11 @@ const styles: StyleRulesCallback<ClassNames> = (theme: Theme) => ({
   },
   borderlessSection: {
     width: '100%',
-    paddingTop: 24,
-    paddingLeft: 16,
-    paddingRight: 16,
-    marginLeft: 40,
-    marginRight: 40,
+    paddingTop: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2,
   },
   roomPaper: {
     padding: 16,
@@ -188,6 +188,15 @@ class HotelRoom extends React.Component<PropsWithStyles, {
     let imgCols = width === 'xs' ? 1 : 3.5;
     if (width === 'sm') {imgCols = 2; }
 
+    let roomCodes: string[] = [];
+    if (result) {
+      result.rooms.map((rm: roomDetail) => {
+        if (roomCodes.indexOf(rm.roomCode) < 0) {
+          roomCodes.push(rm.roomCode);
+        }
+      });
+    }
+
     if (!result ) {
       return ( 
       <Typography type="title" gutterBottom>
@@ -233,9 +242,9 @@ class HotelRoom extends React.Component<PropsWithStyles, {
           </Grid>
         </Grid>
         <Grid container className={classes.borderlessSection} spacing={16} >
-          { result.rooms.map((rm: roomDetail) => 
-                <Grid item xs={12} key={rm.rateCode}>
-                  <Paper className={classes.roomPaper}>{rm.rateDesc}</Paper>
+          { roomCodes.map((rc: string) => 
+                <Grid item xs={12} key={rc}>
+                  <Room roomCode={rc} rooms={result!.rooms} />
                 </Grid>
               )
           }

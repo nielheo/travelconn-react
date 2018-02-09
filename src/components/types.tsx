@@ -89,16 +89,25 @@ export type valueAdd = {
   description: string,
 };
 
+export type roomImage = {
+  url: string,
+  highResUrl: string,
+  isHeroImage: boolean,
+};
+
 export type roomDetail = {
   rateCode: string,
   rateDesc: string,
+  roomCode: string,
   roomTypeDesc: string,
   roomTypeDescLong: string,
   isNonRefundable: boolean,
   isPromo: boolean,
   allotmnet: number,
   chargeableRate: chargeableRate,
+  cancellationPolicyDesc: string,
   valueAdds: valueAdd[],
+  roomImages: roomImage[],
 };
 
 export type hotelDetail = {

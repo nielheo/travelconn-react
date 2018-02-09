@@ -40,7 +40,7 @@ class HotelCard extends React.Component<PropsWithStyles, {}> {
         <Card >
           <CardMedia
             className={classes.media}
-            image=""
+            image={'/imgs/grey.png'}
             title=""
           />
           <CardContent>
