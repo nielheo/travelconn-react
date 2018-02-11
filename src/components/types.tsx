@@ -1,5 +1,5 @@
-// export const rootUrl = 'https://travelconnapi.azurewebsites.net';
-export const rootUrl = 'http://localhost:6500';
+export const rootUrl = 'https://travelconnapi.azurewebsites.net';
+// export const rootUrl = 'http://localhost:6500';
 
 export type currency = {
   code: string,
@@ -136,4 +136,10 @@ export type hotelRoomResult = {
   currency: string,
   hotelDetail: hotelDetail,
   rooms: roomDetail[],
+};
+
+export type autoCompleteCity = {
+  display: string,
+  city: string,
+  country: string,
 };

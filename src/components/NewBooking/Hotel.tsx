@@ -13,6 +13,8 @@ import { DatePicker } from 'material-ui-pickers';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import { room } from '../types';
 
+import SelectCity from './SelectCity';
+
 const styles = (theme: Theme) => ({
   root: {
     flexGrow: 1,
@@ -149,6 +151,7 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
               error={searchClicked && !cityHotel.length}
               fullWidth
             />
+            <SelectCity />
             <FormHelperText id="name-error-text">
               {(searchClicked && !cityHotel.length ? '* Required' : '')}
             </FormHelperText>
