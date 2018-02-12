@@ -231,7 +231,7 @@ class HotelsAvail extends React.Component<PropsWithStyles, {
       <div>
         <Grid container spacing={0} style={{width: '100%'}}>
           <Grid item style={{flex: 1}}>
-            <Typography type="display1" gutterBottom>
+            <Typography variant="display1" gutterBottom>
               {result && result.hotels && 
                 result.hotels.length.toLocaleString('en-us') || 0} hotels in {this.props.match.params.city}
               , {this.props.match.params.country}

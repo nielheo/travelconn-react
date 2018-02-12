@@ -13,7 +13,7 @@ import { DatePicker } from 'material-ui-pickers';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import { room } from '../types';
 
-import SelectCity from './SelectCity';
+import CityAutosuggest from './CityAutosuggest';
 
 const styles = (theme: Theme) => ({
   root: {
@@ -151,7 +151,7 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
               error={searchClicked && !cityHotel.length}
               fullWidth
             />
-            <SelectCity />
+            <CityAutosuggest />
             <FormHelperText id="name-error-text">
               {(searchClicked && !cityHotel.length ? '* Required' : '')}
             </FormHelperText>
@@ -212,7 +212,7 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
           <Button  
             id="nationality" 
             fullWidth 
-            raised 
+            variant="raised" 
             color="primary"
             onClick={this._searchClick}
           >

@@ -50,7 +50,7 @@ class NewBooking extends React.Component<PropsWithStyles, {value: number}> {
     let { classes } = this.props;
     return (
     <div className={classes.root}>
-      <Typography type="display1" gutterBottom>
+      <Typography variant="display1" gutterBottom>
         Create New Booking
       </Typography>
         <AppBar position="static" color="default">

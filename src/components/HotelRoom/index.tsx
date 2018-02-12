@@ -211,7 +211,7 @@ class HotelRoom extends React.Component<PropsWithStyles, {
 
     if (!result ) {
       return ( 
-      <Typography type="title" gutterBottom>
+      <Typography variant="title" gutterBottom>
         Loading your hotel rooms
       </Typography>
       );
@@ -243,12 +243,12 @@ class HotelRoom extends React.Component<PropsWithStyles, {
         </Grid>
         <Grid container className={classes.sectionHeader} spacing={0}>
           <Grid item xs={12}>
-            <Typography type="headline" color="primary" gutterBottom>
+            <Typography variant="headline" color="primary" gutterBottom>
               <b>{result.hotelDetail.name}</b>
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography type="subheading" color="primary" gutterBottom>
+            <Typography variant="subheading" color="primary" gutterBottom>
               {`${result.hotelDetail.address}, ${result.hotelDetail.city}, ${result.hotelDetail.country}`}
             </Typography>
           </Grid>

@@ -49,13 +49,13 @@ class HotelCard extends React.Component<PropsWithStyles, {}> {
               title={hotelDetail.name}
             />
             <CardContent>
-              <Typography type="headline" component="h2" color="primary">
+              <Typography variant="headline" component="h2" color="primary">
                 {hotelDetail.name}
               </Typography>
               <Typography component="p">
                 <span dangerouslySetInnerHTML={this._rawMarkup(hotelDetail.shortDesc)} />
               </Typography>
-              <Typography type="headline" component="p" color="secondary" align={'right'}>
+              <Typography variant="headline" component="p" color="secondary" align={'right'}>
                 {ToFinance( hotelDetail.hotelRooms[0].chargeableRate.currency,
                             hotelDetail.hotelRooms[0].chargeableRate.total, 
                             locale)}

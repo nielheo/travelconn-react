@@ -44,7 +44,7 @@ class HotelCard extends React.Component<PropsWithStyles, {}> {
             title=""
           />
           <CardContent>
-            <Typography type="headline" component="h2" className={classes.hotelName}>
+            <Typography variant="headline" component="h2" className={classes.hotelName}>
               {'.'}
             </Typography>
             <Typography component="p" className={classes.hotelName}>
@@ -56,7 +56,7 @@ class HotelCard extends React.Component<PropsWithStyles, {}> {
             <Typography component="p" className={classes.hotelName}>
               {'.'}
             </Typography>
-            <Typography type="headline" component="p" className={classes.hotelName} align={'right'} >
+            <Typography variant="headline" component="p" className={classes.hotelName} align={'right'} >
               {'.'}
             </Typography>
           </CardContent>

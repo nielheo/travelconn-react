@@ -43,7 +43,7 @@ class Section extends React.Component<PropsWithStyles, {}> {
     return(
       <Grid container className={classes.section} spacing={16}>
         <Grid item xs={12} sm={3} md={2} style={{paddingTop: 20}}>
-          <Typography type="title" color="secondary" gutterBottom style={{lineHeight: '1.4em'}}>
+          <Typography variant="title" color="secondary" gutterBottom style={{lineHeight: '1.4em'}}>
             {this.props.header}
           </Typography>
         </Grid>

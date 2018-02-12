@@ -49,7 +49,7 @@ class Room extends React.Component<PropsWithStyles, {}> {
       <Paper className={classes.roomPaper}>
         <Grid container spacing={0}>
           <Grid item xs={12}>
-            <Typography type="subheading" gutterBottom style={{padding: 16}}>
+            <Typography variant="subheading" gutterBottom style={{padding: 16}}>
               <b>{selectedRooms[0].rateDesc}</b>
             </Typography>
           </Grid>

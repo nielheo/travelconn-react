@@ -7,7 +7,7 @@ export default class Home extends React.Component<RouteComponentProps<{}>, {}> {
     return (
     <div>
         <h1>Hello, world!</h1>
-        <Button raised={true} color="primary">
+        <Button variant={'raised'} color={'primary'}>
           Hello World
         </Button>
     </div>);

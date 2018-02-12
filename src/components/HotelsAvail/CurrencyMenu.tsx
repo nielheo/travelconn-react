@@ -64,7 +64,7 @@ class CurrencyMenu extends React.Component<PropsWithStyles, {
           aria-owns="currency-menu"
           onClick={this._handleClick}
         >
-          <Typography type="title" gutterBottom color="secondary">
+          <Typography variant="title" gutterBottom color="secondary">
             {currSymbol}
           </Typography>
         </IconButton>

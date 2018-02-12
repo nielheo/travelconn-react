@@ -122,7 +122,7 @@ class Room extends React.Component<PropsWithStyles, {
             </Popover>
           </Grid>
           <Grid item md={3} xs={12} style={{textAlign: 'right', padding: 16}}>
-            <Typography type="title" color="secondary">
+            <Typography variant="title" color="secondary">
               {ToFinance(room.chargeableRate.currency, room.chargeableRate.total, 'en-US')}
             </Typography>
           </Grid>
