@@ -142,16 +142,7 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
             fullWidth 
             aria-describedby="name-error-text"
           >
-            <TextField
-              id="cityHotel"
-              label="City / Hotel"
-              type="search"
-              margin="normal"
-              value={cityHotel}
-              error={searchClicked && !cityHotel.length}
-              fullWidth
-            />
-            <SelectCity />
+            <SelectCity defaultValue="bali" />
             <FormHelperText id="name-error-text">
               {(searchClicked && !cityHotel.length ? '* Required' : '')}
             </FormHelperText>
