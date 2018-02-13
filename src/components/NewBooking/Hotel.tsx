@@ -136,11 +136,11 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
       <div className={classes.root}>
       <Grid container spacing={24}>
         <Grid item xs={12} md={6}>
-           
           <FormControl 
             error={searchClicked && !cityHotel.length} 
             fullWidth 
             aria-describedby="name-error-text"
+            style={{marginTop: 16}}
           >
             <SelectCity defaultValue="bali" />
             <FormHelperText id="name-error-text">

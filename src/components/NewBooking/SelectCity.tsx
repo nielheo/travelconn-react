@@ -215,6 +215,7 @@ class SelectCity extends React.Component<PropsWithStyles, {
           City / Hotel Name
         </InputLabel>
         <Input
+          style={{height: 33}}
           id="city"
           fullWidth
           inputComponent={SelectWrapped}
