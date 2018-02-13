@@ -1,8 +1,9 @@
 import * as React from 'react';
 
-import Select, { OptionValues } from 'react-select';
+import Select, { OptionValues, OnChangeHandler } from 'react-select';
 // , { ArrowRendererProps } from 'react-select';
 import Typography from 'material-ui/Typography';
+import Input, { InputLabel } from 'material-ui/Input';
 import ClearIcon from 'material-ui-icons/Clear';
 import ArrowDropDownIcon from 'material-ui-icons/ArrowDropDown';
 import ArrowDropUpIcon from 'material-ui-icons/ArrowDropUp';
@@ -152,6 +153,42 @@ const styles = (theme: Theme) => ({
   },
 });
 
+interface InputProps {
+  // classes: any;
+  value: string;
+  onChange: OnChangeHandler;
+  placeholder: string;
+  // instanceId: string;
+  id: string;
+  name: string;
+  // simpleValue: boolean;
+  // options: any;
+  // label: string;
+}
+
+function onChange () {
+  console.log('onChange');
+}
+
+function SelectWrapped (props: InputProps) {
+  const { value } = props;
+
+  return(
+    <Select
+      // value={'bali'}
+      onChange={onChange}
+      optionComponent={Option}
+      options={cities}
+      noResultsText={<Typography>{'No results found'}</Typography>}
+      clearRenderer={() => <ClearIcon />}
+      placeholder={props.placeholder}
+      arrowRenderer={(arrowprops: ArrowRendererProps) => {return arrowprops.isOpen 
+        ? <ArrowDropDownIcon/> : <ArrowDropUpIcon/>; }}
+      value={value}
+    />
+  );
+}
+
 class SelectCity extends React.Component<PropsWithStyles, {
   value: string
 }> {
@@ -163,26 +200,37 @@ class SelectCity extends React.Component<PropsWithStyles, {
   }
 
   _onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log('_onChange');
     if (e.target.value !== this.state.value) {
       this.setState({value: e.target.value});
     }
   }
 
   render() {
-    const {value} = this.state;
+    // const {value} = this.state;
     return(
-      <Select
-        // value={'bali'}
-        optionComponent={Option}
-        options={cities}
-        noResultsText={<Typography>{'No results found'}</Typography>}
-        clearRenderer={() => <ClearIcon />}
-        placeholder={'Select Hotel / City'}
-        arrowRenderer={(props: ArrowRendererProps) => {return props.isOpen 
-          ? <ArrowDropDownIcon/> : <ArrowDropUpIcon/>; }}
-        value={value}
-        
-      />
+      <div>
+        <InputLabel htmlFor="city">
+          City / Hotel Name
+        </InputLabel>
+        <Input
+          id="city"
+          fullWidth
+          inputComponent={SelectWrapped}
+          inputProps={{
+            // classes,
+            // value: 'bali',
+            onChange: this._onChange,
+            placeholder: '',
+            // instanceId: 'react-select-single',
+            id: 'city-select',
+            name: 'city-select',
+            // simpleValue: true,
+            // options: suggestions,
+          }}
+          
+        />
+      </div>
     );
   }
 }
