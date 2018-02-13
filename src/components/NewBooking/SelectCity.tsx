@@ -43,6 +43,7 @@ const ITEM_HEIGHT = 48;
 
 interface Props {
   defaultValue: string;
+  classes?: WithStyles<'root' | '@global'>;
 }
 
 type PropsWithStyles = Props & WithStyles<'root' | '@global'>;
@@ -154,8 +155,7 @@ const styles = (theme: Theme) => ({
 });
 
 interface InputProps {
-  // classes: any;
-  value: string;
+  value?: string;
   onChange: OnChangeHandler;
   placeholder: string;
   // instanceId: string;
@@ -164,6 +164,7 @@ interface InputProps {
   // simpleValue: boolean;
   // options: any;
   // label: string;
+  // classes?: WithStyles<'root' | '@global'>;
 }
 
 function onChange () {
@@ -207,10 +208,10 @@ class SelectCity extends React.Component<PropsWithStyles, {
   }
 
   render() {
-    // const {value} = this.state;
+    // const {classes} = this.props;
     return(
       <div>
-        <InputLabel htmlFor="city">
+        <InputLabel htmlFor="city" shrink={true}>
           City / Hotel Name
         </InputLabel>
         <Input
