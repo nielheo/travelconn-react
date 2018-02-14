@@ -143,3 +143,8 @@ export type autoCompleteCity = {
   city: string,
   country: string,
 };
+
+export type labelValue = {
+  label: string,
+  value: string,
+};

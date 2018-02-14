@@ -11,10 +11,11 @@ import { MenuItem } from 'material-ui/Menu';
 import { Theme } from 'material-ui/styles/createMuiTheme';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import { ChangeEvent, MouseEvent } from 'react';
-import { rootUrl, autoCompleteCity } from '../types';
+import { rootUrl, autoCompleteCity, labelValue } from '../types';
 // import { autoCompleteCity } from '../types';
 
-let cities = [
+let cities: labelValue[] = [];
+/*
   {city: 'bali', country: 'indonesia', display: 'Bali, Indonesia'},
   {city: 'singapore', country: 'singapore', display: 'Singapore, Singapore'},
   {city: 'bangkok', country: 'thailand', display: 'Bangkok, Thailand'},
@@ -22,7 +23,7 @@ let cities = [
   value: `${city.city}|${city.country}`,
   label: city.display,
 }));
-
+*/
 class Option extends React.Component<OptionValues, {}> {
   handleClick = (event: MouseEvent<HTMLElement>) => {
     let { onSelect, option } = Object(this.props);
@@ -55,8 +56,9 @@ interface ArrowRendererProps {
 const ITEM_HEIGHT = 48;
 
 interface Props {
-  defaultValue: string;
+  value: string;
   classes?: WithStyles<'root' | '@global'>;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 type PropsWithStyles = Props & WithStyles<'root' | '@global'>;
@@ -234,23 +236,10 @@ let SelectWrappedWithStyles = withStyles(styles)(SelectWrapped);
 class SelectCity extends React.Component<PropsWithStyles, {
   value: string
 }> {
-  constructor(props: PropsWithStyles) {
-    super(props);
-    this.state = {
-      value: this.props.defaultValue
-    };
-  }
-
-  _onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log('_onChange');
-    console.log(e);
-    let option = Object(e);
-    if (option.value !== this.state.value) {
-      this.setState({value: option.value});
-    }
-  }
 
   render() {
+    console.log(this.props);
+    console.log(this.state);
     // const {classes} = this.props;
     return(
       <div>
@@ -264,8 +253,8 @@ class SelectCity extends React.Component<PropsWithStyles, {
           inputComponent={SelectWrappedWithStyles}
           inputProps={{
             // classes,
-            value: this.state.value,
-            onChange: this._onChange,
+            value: this.props.value,
+            onChange: this.props.onChange,
             placeholder: '',
             // instanceId: 'react-select-single',
             id: 'city-select',

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ChangeEvent } from 'react';
 import * as moment from 'moment';
 
 import HotelOccupancyDialog from '../HotelOccupancyDialog';
@@ -128,10 +129,31 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
   _occupancyFocus = () => {
     this.setState({openHotelOccupancy: true});
   }
-  
+
+  _onCityChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log('_onChange');
+    console.log(e);
+    let option = Object(e);
+    let stateValue = (this.state.city && this.state.country) 
+      ? (this.state.city + '|' + this.state.country) : '';
+
+    if (option.value !== stateValue) {
+      if (option.value) {
+        
+        console.log(option.value);
+        console.log(stateValue);
+        let values = option.value.split('|');
+        this.setState({city: values[0], country: values[1]});
+      } else {
+        this.setState({city: '', country: ''});
+      }
+    }
+  }
+
   public render() {
     let {classes} = this.props;
     let {searchClicked, cityHotel, city, country} = this.state;
+    console.log(this.state);
     return (
       <div className={classes.root}>
       <Grid container spacing={24}>
@@ -142,7 +164,10 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
             aria-describedby="name-error-text"
             style={{marginTop: 16}}
           >
-            <SelectCity defaultValue={`${city}|${country}`} />
+            <SelectCity 
+              value={(city && country) ? `${city}|${country}` : ''} 
+              onChange={this._onCityChange} 
+            />
             <FormHelperText id="name-error-text">
               {(searchClicked && !cityHotel.length ? '* Required' : '')}
             </FormHelperText>
