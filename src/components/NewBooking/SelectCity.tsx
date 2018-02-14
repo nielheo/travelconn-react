@@ -183,10 +183,6 @@ interface InputProps {
   // classes?: WithStyles<'root' | '@global'>;
 }
 
-function onChange () {
-  console.log('onChange');
-}
-
 type InputPropsWithStyles = InputProps & WithStyles<'root' | '@global'>;
 
 function SelectWrapped (props: InputPropsWithStyles) {
@@ -195,7 +191,7 @@ function SelectWrapped (props: InputPropsWithStyles) {
   return(
     <Select
       // value={'bali'}
-      onChange={onChange}
+      onChange={props.onChange}
       optionComponent={Option}
       options={cities}
       noResultsText={<Typography>{'No results found'}</Typography>}
@@ -223,8 +219,10 @@ class SelectCity extends React.Component<PropsWithStyles, {
 
   _onChange = (e: ChangeEvent<HTMLInputElement>) => {
     console.log('_onChange');
-    if (e.target.value !== this.state.value) {
-      this.setState({value: e.target.value});
+    console.log(e);
+    let option = Object(e);
+    if (option.value !== this.state.value) {
+      this.setState({value: option.value});
     }
   }
 
@@ -242,7 +240,7 @@ class SelectCity extends React.Component<PropsWithStyles, {
           inputComponent={SelectWrappedWithStyles}
           inputProps={{
             // classes,
-            value: 'bali',
+            value: this.state.value,
             onChange: this._onChange,
             placeholder: '',
             // instanceId: 'react-select-single',
@@ -251,7 +249,6 @@ class SelectCity extends React.Component<PropsWithStyles, {
             // simpleValue: true,
             // options: suggestions,
           }}
-          
         />
       </div>
     );
