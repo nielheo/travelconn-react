@@ -68,6 +68,7 @@ const styles = (theme: Theme) => ({
       '&:hover': {
         boxShadow: 'none',
       },
+      
     },
     '.Select-multi-value-wrapper': {
       flexGrow: 1,
@@ -151,6 +152,9 @@ const styles = (theme: Theme) => ({
       width: 1,
       margin: -1,
     },
+    '.Select': {
+      width: '100%',
+    }
   },
 });
 
@@ -171,7 +175,9 @@ function onChange () {
   console.log('onChange');
 }
 
-function SelectWrapped (props: InputProps) {
+type InputPropsWithStyles = InputProps & WithStyles<'root' | '@global'>;
+
+function SelectWrapped (props: InputPropsWithStyles) {
   const { value } = props;
 
   return(
@@ -186,9 +192,12 @@ function SelectWrapped (props: InputProps) {
       arrowRenderer={(arrowprops: ArrowRendererProps) => {return arrowprops.isOpen 
         ? <ArrowDropDownIcon/> : <ArrowDropUpIcon/>; }}
       value={value}
+      style={{width: '100%'}}
     />
   );
 }
+
+let SelectWrappedWithStyles = withStyles(styles)(SelectWrapped);
 
 class SelectCity extends React.Component<PropsWithStyles, {
   value: string
@@ -218,10 +227,10 @@ class SelectCity extends React.Component<PropsWithStyles, {
           style={{height: 33}}
           id="city"
           fullWidth
-          inputComponent={SelectWrapped}
+          inputComponent={SelectWrappedWithStyles}
           inputProps={{
             // classes,
-            // value: 'bali',
+            value: 'bali',
             onChange: this._onChange,
             placeholder: '',
             // instanceId: 'react-select-single',
