@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Select, { OptionValues, OnChangeHandler } from 'react-select';
+import Select, { OnChangeHandler, OptionValues } from 'react-select';
 // , { ArrowRendererProps } from 'react-select';
 import Typography from 'material-ui/Typography';
 import Input, { InputLabel } from 'material-ui/Input';
@@ -10,7 +10,7 @@ import ArrowDropUpIcon from 'material-ui-icons/ArrowDropUp';
 import { MenuItem } from 'material-ui/Menu';
 import { Theme } from 'material-ui/styles/createMuiTheme';
 import { withStyles, WithStyles } from 'material-ui/styles';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, MouseEvent } from 'react';
 // import { autoCompleteCity } from '../types';
 
 const cities = [
@@ -23,12 +23,24 @@ const cities = [
 }));
 
 class Option extends React.Component<OptionValues, {}> {
+  handleClick = (event: MouseEvent<HTMLElement>) => {
+    let { onSelect, option } = Object(this.props);
+    onSelect(option, event);
+  }
+    
   render() {
+    let { children, isFocused, isSelected, onFocus } = Object(this.props);
     return (
       <MenuItem
+        onFocus={onFocus}
+        selected={isFocused}
+        onClick={this.handleClick}
         component="div"
+        style={{
+          fontWeight: isSelected ? 500 : 400,
+        }}
       >
-        {this.props.children}
+        {children}
       </MenuItem>
     );
   }
@@ -159,7 +171,7 @@ const styles = (theme: Theme) => ({
 });
 
 interface InputProps {
-  value?: string;
+  value?: OptionValues;
   onChange: OnChangeHandler;
   placeholder: string;
   // instanceId: string;
@@ -179,7 +191,7 @@ type InputPropsWithStyles = InputProps & WithStyles<'root' | '@global'>;
 
 function SelectWrapped (props: InputPropsWithStyles) {
   const { value } = props;
-
+  console.log(value);
   return(
     <Select
       // value={'bali'}
