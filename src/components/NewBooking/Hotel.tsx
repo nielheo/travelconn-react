@@ -47,9 +47,9 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
   constructor(props: PropsWithStyles) {
     super(props);
     this.state = {
-      cityHotel: 'Bangkok, Thailand',
+      cityHotel: '',
       city: 'bangkok',
-      country: 'th',
+      country: 'thailand',
       rooms: [{adult: 2}],
       checkIn: moment().add(2, 'd').toDate(),
       checkOut: moment().add(3, 'd').toDate(),
@@ -131,7 +131,7 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
   
   public render() {
     let {classes} = this.props;
-    let {searchClicked, cityHotel} = this.state;
+    let {searchClicked, cityHotel, city, country} = this.state;
     return (
       <div className={classes.root}>
       <Grid container spacing={24}>
@@ -142,7 +142,7 @@ class NewBookingHotel extends React.Component<PropsWithStyles,
             aria-describedby="name-error-text"
             style={{marginTop: 16}}
           >
-            <SelectCity defaultValue="bali" />
+            <SelectCity defaultValue={`${city}|${country}`} />
             <FormHelperText id="name-error-text">
               {(searchClicked && !cityHotel.length ? '* Required' : '')}
             </FormHelperText>

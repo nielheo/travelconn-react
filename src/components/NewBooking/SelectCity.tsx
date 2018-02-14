@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Select, { OnChangeHandler, OptionValues } from 'react-select';
+import { Async, OnChangeHandler, OptionValues } from 'react-select';
 // , { ArrowRendererProps } from 'react-select';
 import Typography from 'material-ui/Typography';
 import Input, { InputLabel } from 'material-ui/Input';
@@ -11,14 +11,15 @@ import { MenuItem } from 'material-ui/Menu';
 import { Theme } from 'material-ui/styles/createMuiTheme';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import { ChangeEvent, MouseEvent } from 'react';
+import { rootUrl, autoCompleteCity } from '../types';
 // import { autoCompleteCity } from '../types';
 
-const cities = [
+let cities = [
   {city: 'bali', country: 'indonesia', display: 'Bali, Indonesia'},
   {city: 'singapore', country: 'singapore', display: 'Singapore, Singapore'},
   {city: 'bangkok', country: 'thailand', display: 'Bangkok, Thailand'},
 ].map(city => ({
-  value: city.city,
+  value: `${city.city}|${city.country}`,
   label: city.display,
 }));
 
@@ -185,11 +186,26 @@ interface InputProps {
 
 type InputPropsWithStyles = InputProps & WithStyles<'root' | '@global'>;
 
+const getOptions = (query: string, callback: Function) => {
+  return fetch(`${rootUrl}/api/cityautocomplete?query=${query}`)
+    .then((response) => {
+      return response.json();
+    }).then((json) => {
+      if (query.length > 1) {
+        cities = json.map((opt: autoCompleteCity) => { 
+          return { value: `${opt.city}|${opt.country}`, label: opt.display }; });
+      } 
+      return { options: cities, complete: true };
+    });
+  // setTimeout(callback(null, { options: cities, complete: true }), 500); 
+};
+
 function SelectWrapped (props: InputPropsWithStyles) {
   const { value } = props;
   console.log(value);
+  console.log(cities);
   return(
-    <Select
+    <Async
       // value={'bali'}
       onChange={props.onChange}
       optionComponent={Option}
@@ -201,6 +217,14 @@ function SelectWrapped (props: InputPropsWithStyles) {
         ? <ArrowDropDownIcon/> : <ArrowDropUpIcon/>; }}
       value={value}
       style={{width: '100%'}}
+      loadOptions={getOptions}
+      // loadingPlaceholder={'loading ...'}
+      autoload={false}
+      isLoading={false}
+      onBlurResetsInput={false}
+      // valueComponent={Option}
+      // minimumInput={2}
+      
     />
   );
 }
