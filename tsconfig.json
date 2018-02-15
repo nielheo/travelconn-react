@@ -25,5 +25,8 @@
     "webpack",
     "jest",
     "src/setupTests.ts"
+  ],
+  "files": [
+    "typings/react-select.d.ts"
   ]
 }
