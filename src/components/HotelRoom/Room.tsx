@@ -57,7 +57,7 @@ class Room extends React.Component<PropsWithStyles, {}> {
             <div style={{backgroundColor: '#f0f0f0', padding: 8}}>
               <Grid container>
                 <Grid item md={2} xs={12} >
-                  <img src={selectedRooms[0].roomImages[0].url} width={'100%'} />
+                  <img src={selectedRooms[0].roomImages && selectedRooms[0].roomImages[0].url} width={'100%'} />
                   <span style={{fontSize: '0.8em'}}>Room Details</span>
                 </Grid>
                 <Grid item md={10} xs={12} >
